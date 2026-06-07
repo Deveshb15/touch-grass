@@ -77,9 +77,9 @@ struct TouchGrassView: View {
             // Bottom scrim — guarantees the countdown reads over any sky/water.
             VStack {
                 Spacer()
-                LinearGradient(colors: [.clear, .black.opacity(0.18)],
+                LinearGradient(colors: [.clear, .black.opacity(0.32)],
                                startPoint: .top, endPoint: .bottom)
-                    .frame(height: size.height * 0.32)
+                    .frame(height: size.height * 0.34)
             }
             .allowsHitTesting(false)
 
@@ -98,21 +98,24 @@ struct TouchGrassView: View {
             VStack {
                 Spacer()
                 VStack(spacing: 14) {
+                    // White on a solid dark pill reads cleanly at every day stage
+                    // (pastel dawn, cream midday, violet dusk) and over the soil —
+                    // unlike a material capsule, which picks up the brown shore.
                     Text(countdown)
                         .font(.system(size: 46, weight: .semibold, design: .rounded))
                         .monospacedDigit()
-                        .foregroundStyle(ink)
+                        .foregroundStyle(.white)
                         .padding(.horizontal, 32)
                         .padding(.vertical, 14)
-                        .background(Capsule().fill(.ultraThinMaterial))
-                        .overlay(Capsule().stroke(Color.white.opacity(0.5), lineWidth: 1))
-                        .shadow(color: .black.opacity(0.18), radius: 14, y: 5)
+                        .background(Capsule().fill(Color.black.opacity(0.34)))
+                        .overlay(Capsule().stroke(Color.white.opacity(0.4), lineWidth: 1))
+                        .shadow(color: .black.opacity(0.30), radius: 16, y: 6)
 
                     Text("You've earned a pause — look at something far away and breathe.")
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                         .multilineTextAlignment(.center)
-                        .foregroundStyle(ink.opacity(0.78))
-                        .shadow(color: .black.opacity(0.15), radius: 6, y: 1)
+                        .foregroundStyle(.white.opacity(0.92))
+                        .shadow(color: .black.opacity(0.45), radius: 6, y: 1)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.bottom, size.height * 0.06)
