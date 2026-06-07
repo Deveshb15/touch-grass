@@ -29,9 +29,10 @@ final class OverlayWindow: NSWindow {
         // this the overlay would order out the moment focus leaves it.
         hidesOnDeactivate = false
         isReleasedWhenClosed = false
-        // Beige base (matches TouchGrassView's gradient) so there's no black
-        // flash before the SwiftUI view paints.
-        backgroundColor = NSColor(srgbRed: 0.953, green: 0.918, blue: 0.847, alpha: 1)
+        // Dawn sky-bottom (#F4C9A8) base — matches the first frame of the new
+        // landscape (TouchGrassView starts at the dawn keyframe), so there's no
+        // black or beige flash before the SwiftUI view paints.
+        backgroundColor = NSColor(srgbRed: 0.957, green: 0.788, blue: 0.659, alpha: 1)
         isMovable = false
     }
 

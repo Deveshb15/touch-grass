@@ -130,13 +130,14 @@ struct PlantView: View {
     @State private var sway = false
 
     // Leaf pairs along the stem: (t on stem, growth threshold, side, length, width)
+    // Thresholds front-loaded so the plant leafs out fast, early in the block.
     private let leaves: [(t: CGFloat, appear: Double, side: CGFloat, len: CGFloat, wid: CGFloat)] = [
-        (0.32, 0.16,  1, 0.34, 0.12),
-        (0.32, 0.20, -1, 0.32, 0.11),
-        (0.54, 0.38,  1, 0.30, 0.11),
-        (0.54, 0.42, -1, 0.28, 0.10),
-        (0.74, 0.58,  1, 0.24, 0.09),
-        (0.74, 0.62, -1, 0.22, 0.08),
+        (0.32, 0.04,  1, 0.34, 0.12),
+        (0.32, 0.07, -1, 0.32, 0.11),
+        (0.54, 0.14,  1, 0.30, 0.11),
+        (0.54, 0.18, -1, 0.28, 0.10),
+        (0.74, 0.26,  1, 0.24, 0.09),
+        (0.74, 0.30, -1, 0.22, 0.08),
     ]
 
     var body: some View {
@@ -191,14 +192,15 @@ struct PlantView: View {
         .onAppear { sway = true }
     }
 
-    private var stemGrow: CGFloat { min(1, CGFloat(growth) / 0.85) }
-    /// Bud fades/scales in only once the stem has reached the top (≈0.85) …
-    private var flowerAppear: CGFloat { CGFloat(max(0, min(1, (growth - 0.82) / 0.08))) }
-    /// … then the petals open over the final stretch.
-    private var flowerOpen: CGFloat { CGFloat(max(0, min(1, (growth - 0.88) / 0.12))) }
+    /// Stem completes by ~35% of the block (was 85%) — it visibly shoots up fast.
+    private var stemGrow: CGFloat { min(1, CGFloat(growth) / 0.35) }
+    /// Bud forms once the plant is leafy; opens through the golden-hour window so
+    /// the bloom + the warmest sky land together, then holds through the dusk.
+    private var flowerAppear: CGFloat { CGFloat(max(0, min(1, (growth - 0.60) / 0.08))) }
+    private var flowerOpen: CGFloat { CGFloat(max(0, min(1, (growth - 0.68) / 0.20))) }
 
     private func leafGrow(_ appearAt: Double) -> CGFloat {
-        CGFloat(max(0, min(1, (growth - appearAt) / 0.22)))
+        CGFloat(max(0, min(1, (growth - appearAt) / 0.14)))
     }
 
     /// Two larger, lighter, blurred leaves sitting behind the stem for depth.
@@ -210,7 +212,7 @@ struct PlantView: View {
                  angle: -.pi / 2 + side * 0.95,
                  length: size.height * 0.36,
                  width: size.height * 0.13,
-                 grow: leafGrow(0.45))
+                 grow: leafGrow(0.20))
                 .fill(Palette.leafLight.opacity(0.45))
                 .blur(radius: 7)
                 .animation(.spring(response: 0.9, dampingFraction: 0.7), value: growth)
