@@ -37,7 +37,8 @@ enum AIActivity: Equatable {
 struct SampleResult {
     let activity: AIActivity
     let idleSeconds: Double
-    /// True when an AI target is active AND the user isn't idle.
+    /// True when this tick counts as active AI engagement: an AI surface frontmost
+    /// while present, an AI CLI actively working, or within the grace window.
     let counted: Bool
 }
 

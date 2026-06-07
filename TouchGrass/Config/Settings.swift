@@ -17,6 +17,12 @@ final class AppSettings: ObservableObject {
     /// After an AI app/tab leaves the foreground, keep counting this long — covers
     /// switching to another window while the AI keeps working in the background.
     @Published var backgroundGraceSeconds: Double { didSet { defaults.set(backgroundGraceSeconds, forKey: Keys.grace) } }
+    /// Seconds since the last keyboard/mouse input within which you still count as
+    /// "present" at an AI surface (reading/scrolling counts as use).
+    @Published var presenceWindowSeconds: Double { didSet { defaults.set(presenceWindowSeconds, forKey: Keys.presence) } }
+    /// Minimum CPU fraction (of one core, 0…1) an AI-CLI process must consume
+    /// between ticks to count as "the agent is working" while not frontmost.
+    @Published var cliWorkingCPUFraction: Double { didSet { defaults.set(cliWorkingCPUFraction, forKey: Keys.cliCPU) } }
     /// How far ahead of the threshold to warn ("break coming up").
     @Published var warningLeadMinutes: Double { didSet { defaults.set(warningLeadMinutes, forKey: Keys.warningLead) } }
     /// Master on/off for monitoring.
@@ -27,6 +33,8 @@ final class AppSettings: ObservableObject {
         blockDurationMinutes = defaults.object(forKey: Keys.blockDuration) as? Double ?? 10
         windowLengthMinutes = defaults.object(forKey: Keys.windowLength) as? Double ?? 60
         backgroundGraceSeconds = defaults.object(forKey: Keys.grace) as? Double ?? 180
+        presenceWindowSeconds = defaults.object(forKey: Keys.presence) as? Double ?? 60
+        cliWorkingCPUFraction = defaults.object(forKey: Keys.cliCPU) as? Double ?? 0.03
         warningLeadMinutes = defaults.object(forKey: Keys.warningLead) as? Double ?? 5
         monitoringEnabled = defaults.object(forKey: Keys.enabled) as? Bool ?? true
     }
@@ -41,6 +49,8 @@ final class AppSettings: ObservableObject {
         static let blockDuration = "blockDurationMinutes"
         static let windowLength = "windowLengthMinutes"
         static let grace = "backgroundGraceSeconds"
+        static let presence = "presenceWindowSeconds"
+        static let cliCPU = "cliWorkingCPUFraction"
         static let warningLead = "warningLeadMinutes"
         static let enabled = "monitoringEnabled"
     }

@@ -36,6 +36,10 @@ private struct GeneralSettings: View {
                        range: 0...30, unit: "min before block")
                 slider("Background grace", value: $settings.backgroundGraceSeconds,
                        range: 0...900, unit: "sec", step: 15)
+                slider("Presence window", value: $settings.presenceWindowSeconds,
+                       range: 10...300, unit: "sec since input", step: 5)
+                slider("Agent-busy threshold", value: cpuPercentBinding,
+                       range: 1...50, unit: "% of a core", step: 1)
             }
             Section {
                 Toggle("Enable monitoring", isOn: $settings.monitoringEnabled)
@@ -44,6 +48,13 @@ private struct GeneralSettings: View {
             }
         }
         .formStyle(.grouped)
+    }
+
+    /// The CLI-busy threshold is stored as a 0…1 CPU fraction but shown as a
+    /// percentage of one core, which reads far better on the slider.
+    private var cpuPercentBinding: Binding<Double> {
+        .init(get: { settings.cliWorkingCPUFraction * 100 },
+              set: { settings.cliWorkingCPUFraction = $0 / 100 })
     }
 
     private func slider(_ title: String, value: Binding<Double>,

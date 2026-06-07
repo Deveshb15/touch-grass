@@ -72,9 +72,16 @@ final class TargetCatalog: ObservableObject {
     ]
 
     static let terminalBundleIDs: Set<String> = [
+        // terminals
         "com.apple.Terminal", "com.googlecode.iterm2", "dev.warp.Warp-Stable",
         "net.kovidgoyal.kitty", "io.alacritty", "com.github.wez.wezterm",
         "com.mitchellh.ghostty", "co.zeit.hyper", "org.tabby",
+        // editors/IDEs that host CLIs in an integrated terminal
+        "com.microsoft.VSCode", "com.microsoft.VSCodeInsiders",
+        "com.todesktop.230313mzl4w4u92",   // Cursor
+        "com.exafunction.windsurf",        // Windsurf
+        "com.jetbrains.intellij", "com.jetbrains.pycharm",
+        "com.jetbrains.WebStorm", "com.jetbrains.goland",
     ]
 
     static let browsers: [String: BrowserTarget] = [

@@ -1,6 +1,13 @@
 import Foundation
 import Darwin
 
+/// The result of one CLI scan: the first matched AI CLI name (for the HUD) and
+/// every pid whose argv matched a wanted CLI name (for CPU sampling).
+struct CLIScan {
+    let name: String?
+    let pids: [pid_t]
+}
+
 /// Detects AI command-line tools running for the current user by scanning the
 /// process table with libproc. `NSRunningApplication` only sees GUI apps, so a
 /// `claude`/`codex` process is invisible to it — libproc is the mechanism.
@@ -11,7 +18,7 @@ import Darwin
 /// For interpreter-hosted CLIs (`node …/claude`) we also check argv[1].
 final class CLIDetector {
     private let names: () -> Set<String>
-    private var cached: String?
+    private var cachedScan = CLIScan(name: nil, pids: [])
     private var lastScan: Date = .distantPast
     private let throttle: TimeInterval = 2.0
 
@@ -27,20 +34,29 @@ final class CLIDetector {
     }
 
     /// Returns the matched AI CLI name if one is running, else nil. Throttled.
-    func activeAICLI() -> String? {
-        if Date().timeIntervalSince(lastScan) < throttle { return cached }
+    func activeAICLI() -> String? { scan().name }
+
+    /// Returns the matched CLI name + every matching pid. Throttled (2 s); CPU
+    /// sampling tolerates the gap since it diffs over actual elapsed time.
+    func scan() -> CLIScan {
+        if Date().timeIntervalSince(lastScan) < throttle { return cachedScan }
         lastScan = Date()
-        cached = scan()
-        return cached
+        cachedScan = fullScan()
+        return cachedScan
     }
 
-    private func scan() -> String? {
+    private func fullScan() -> CLIScan {
         let wanted = names()
-        guard !wanted.isEmpty else { return nil }
+        guard !wanted.isEmpty else { return CLIScan(name: nil, pids: []) }
+        var name: String?
+        var pids: [pid_t] = []
         for pid in listPIDs() where pid > 0 {
-            if let match = match(pid: pid, wanted: wanted) { return match }
+            if let match = match(pid: pid, wanted: wanted) {
+                if name == nil { name = match }
+                pids.append(pid)
+            }
         }
-        return nil
+        return CLIScan(name: name, pids: pids)
     }
 
     private func match(pid: pid_t, wanted: Set<String>) -> String? {
@@ -59,12 +75,20 @@ final class CLIDetector {
         return nil
     }
 
+    /// All PIDs on the system. Uses `proc_listpids(PROC_ALL_PIDS)` with a
+    /// probe-then-fill: `proc_listallpids` was observed to silently under-report
+    /// (returning ~240 of ~960 processes and omitting the very CLIs we look for),
+    /// so the agent was never detected. We size the buffer from a nil-buffer probe
+    /// plus a margin for processes spawned between the probe and the fill.
     private func listPIDs() -> [pid_t] {
-        let maxCount = 8192
-        var buffer = [pid_t](repeating: 0, count: maxCount)
-        let byteCount = proc_listallpids(&buffer, Int32(maxCount * MemoryLayout<pid_t>.size))
-        guard byteCount > 0 else { return [] }
-        return Array(buffer.prefix(Int(byteCount) / MemoryLayout<pid_t>.size))
+        let probe = proc_listpids(UInt32(PROC_ALL_PIDS), 0, nil, 0)
+        guard probe > 0 else { return [] }
+        let capacity = Int(probe) / MemoryLayout<pid_t>.size + 64
+        var buffer = [pid_t](repeating: 0, count: capacity)
+        let bytes = proc_listpids(UInt32(PROC_ALL_PIDS), 0, &buffer,
+                                  Int32(capacity * MemoryLayout<pid_t>.size))
+        guard bytes > 0 else { return [] }
+        return Array(buffer.prefix(Int(bytes) / MemoryLayout<pid_t>.size))
     }
 
     /// Returns argv for a process via KERN_PROCARGS2. Buffer is sized to the
