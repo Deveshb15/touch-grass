@@ -27,6 +27,10 @@ final class AppSettings: ObservableObject {
     @Published var warningLeadMinutes: Double { didSet { defaults.set(warningLeadMinutes, forKey: Keys.warningLead) } }
     /// Master on/off for monitoring.
     @Published var monitoringEnabled: Bool { didSet { defaults.set(monitoringEnabled, forKey: Keys.enabled) } }
+    /// What to call you in the overlay copy ("{name}, go touch some grass."). Empty → generic copy.
+    @Published var userName: String { didSet { defaults.set(userName, forKey: Keys.userName) } }
+    /// Whether the first-run onboarding has been completed. Gates the welcome window.
+    @Published var hasOnboarded: Bool { didSet { defaults.set(hasOnboarded, forKey: Keys.hasOnboarded) } }
 
     init() {
         thresholdMinutes = defaults.object(forKey: Keys.threshold) as? Double ?? 30
@@ -37,6 +41,8 @@ final class AppSettings: ObservableObject {
         cliWorkingCPUFraction = defaults.object(forKey: Keys.cliCPU) as? Double ?? 0.03
         warningLeadMinutes = defaults.object(forKey: Keys.warningLead) as? Double ?? 5
         monitoringEnabled = defaults.object(forKey: Keys.enabled) as? Bool ?? true
+        userName = defaults.object(forKey: Keys.userName) as? String ?? ""
+        hasOnboarded = defaults.object(forKey: Keys.hasOnboarded) as? Bool ?? false
     }
 
     var thresholdSeconds: Double { thresholdMinutes * 60 }
@@ -53,5 +59,7 @@ final class AppSettings: ObservableObject {
         static let cliCPU = "cliWorkingCPUFraction"
         static let warningLead = "warningLeadMinutes"
         static let enabled = "monitoringEnabled"
+        static let userName = "userName"
+        static let hasOnboarded = "hasOnboarded"
     }
 }

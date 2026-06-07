@@ -34,6 +34,9 @@ final class BlockController: ObservableObject {
 
     private let settings: AppSettings
     private var endsAt: Date?
+    /// Picked once per block so the overlay's personalized title/helper stay stable
+    /// for this break and rotate to a different line on the next one.
+    private var greetingSeed = 0
     private var overlays: [OverlayWindow] = []
     private var timer: Timer?
     private var observers: [NSObjectProtocol] = []
@@ -78,6 +81,7 @@ final class BlockController: ObservableObject {
         endsAt = end
         UserDefaults.standard.set(end.timeIntervalSince1970, forKey: Self.key)
         isBlocking = true
+        greetingSeed = Int.random(in: 0..<10_000)
         clock.total = max(1, end.timeIntervalSinceNow)
 
         buildOverlays()
@@ -125,7 +129,8 @@ final class BlockController: ObservableObject {
         lastScreenFrames = NSScreen.screens.map(\.frame)
         for (i, screen) in NSScreen.screens.enumerated() {
             let window = OverlayWindow(screen: screen)
-            let host = NSHostingView(rootView: TouchGrassView(clock: clock))
+            let host = NSHostingView(rootView: TouchGrassView(
+                clock: clock, userName: settings.userName, greetingSeed: greetingSeed))
             // By default NSHostingView resizes its window to the SwiftUI content's
             // intrinsic size, which shrinks/shifts the overlay off the full-screen
             // frame. Empty sizingOptions disables that; autoresizing fills the window.

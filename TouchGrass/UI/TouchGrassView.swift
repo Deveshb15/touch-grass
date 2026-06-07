@@ -12,6 +12,10 @@ import SwiftUI
 /// drives the birds, ripples, and clouds as pure functions of elapsed time.
 struct TouchGrassView: View {
     @ObservedObject var clock: BlockClock
+    /// Name shown in the personalized title; empty → generic copy.
+    var userName: String = ""
+    /// Chosen once per block so the rotating title/helper stay stable for this break.
+    var greetingSeed: Int = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// Reference epoch for the continuous clock, captured once per overlay so the
@@ -83,13 +87,17 @@ struct TouchGrassView: View {
             }
             .allowsHitTesting(false)
 
-            // Title, top.
+            // Title, top — personalized + rotating per block.
             VStack {
-                Text("Touch grass")
+                Text(BlockGreeting.title(name: userName, seed: greetingSeed))
                     .font(.system(size: 40, weight: .semibold, design: .rounded))
                     .tracking(1)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.7)
                     .foregroundStyle(ink)
                     .shadow(color: .black.opacity(0.18), radius: 8, y: 1)
+                    .padding(.horizontal, 32)
                 Spacer()
             }
             .padding(.top, size.height * 0.08)
@@ -111,7 +119,7 @@ struct TouchGrassView: View {
                         .overlay(Capsule().stroke(Color.white.opacity(0.4), lineWidth: 1))
                         .shadow(color: .black.opacity(0.30), radius: 16, y: 6)
 
-                    Text("You've earned a pause — look at something far away and breathe.")
+                    Text(BlockGreeting.helper(name: userName, seed: greetingSeed))
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.white.opacity(0.92))

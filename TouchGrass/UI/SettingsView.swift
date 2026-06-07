@@ -25,13 +25,16 @@ private struct GeneralSettings: View {
 
     var body: some View {
         Form {
+            Section("You") {
+                TextField("Your name", text: $settings.userName)
+            }
             Section("Limits") {
                 slider("Block after", value: $settings.thresholdMinutes,
                        range: 0.2...120, unit: "min of AI use")
                 slider("Block duration", value: $settings.blockDurationMinutes,
                        range: 0.2...60, unit: "min")
                 slider("Rolling window", value: $settings.windowLengthMinutes,
-                       range: 5...240, unit: "min", step: 5)
+                       range: 5...480, unit: "min", step: 5)
                 slider("Warn", value: $settings.warningLeadMinutes,
                        range: 0...30, unit: "min before block")
                 slider("Background grace", value: $settings.backgroundGraceSeconds,
