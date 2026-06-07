@@ -42,6 +42,12 @@ final class AppController: ObservableObject {
         }
     }
 
+    /// Debug: trigger a short block immediately to verify the overlay.
+    func startTestBlock() {
+        blocker.startTestBlock()
+        isBlocking = true
+    }
+
     /// Convenience for the menu-bar progress bar (0...1).
     var usageFraction: Double {
         guard settings.thresholdSeconds > 0 else { return 0 }

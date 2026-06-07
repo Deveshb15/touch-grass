@@ -13,14 +13,25 @@ final class OverlayWindow: NSWindow {
             defer: false
         )
         setFrame(screen.frame, display: false)
-        // CGShieldingWindowLevel() is what screen savers use — above everything.
+        // Shielding level composites above everything on EVERY display regardless of
+        // which app/display is active — so one window per screen, ordered front via
+        // orderFrontRegardless(), covers all displays at once without chasing focus.
+        // (The earlier "nothing showed" bug was makeKeyAndOrderFront vs
+        // orderFrontRegardless, not the level.)
         level = NSWindow.Level(rawValue: Int(CGShieldingWindowLevel()))
-        collectionBehavior = [.canJoinAllSpaces, .stationary, .fullScreenAuxiliary, .ignoresCycle]
+        // .canJoinAllSpaces → appear on every Space; .fullScreenAuxiliary → also over
+        // other apps' full-screen Spaces; .stationary → don't shift on Space changes.
+        collectionBehavior = [.canJoinAllSpaces, .stationary, .fullScreenAuxiliary]
         isOpaque = true
         hasShadow = false
         ignoresMouseEvents = false
+        // The app (accessory, no normal windows) keeps resigning active; without
+        // this the overlay would order out the moment focus leaves it.
+        hidesOnDeactivate = false
         isReleasedWhenClosed = false
-        backgroundColor = .black
+        // Beige base (matches TouchGrassView's gradient) so there's no black
+        // flash before the SwiftUI view paints.
+        backgroundColor = NSColor(srgbRed: 0.953, green: 0.918, blue: 0.847, alpha: 1)
         isMovable = false
     }
 

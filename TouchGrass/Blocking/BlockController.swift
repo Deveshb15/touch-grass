@@ -9,11 +9,21 @@ final class BlockClock: ObservableObject {
     @Published var total: TimeInterval = 1
 }
 
-/// Owns the "touch grass" lockout: full-screen overlays on every display, the
-/// kiosk presentation options, the countdown, and restart-persistent timing.
+/// Owns the "touch grass" lockout: a full-screen overlay on every display, the
+/// countdown, and restart-persistent timing.
 ///
-/// "Firm but escapable" — no relaunch daemon, no Activity Monitor blocking. A
-/// determined user can still kill the process; that's an accepted tradeoff.
+/// The app stays an `.accessory` (menu-bar) app throughout — it deliberately does
+/// NOT switch to `.regular`/activate, because activating a menu-bar app triggers a
+/// Space switch that drops the overlay onto a Space you aren't viewing (especially
+/// with multiple displays / full-screen apps). Instead each overlay window uses
+/// `.canJoinAllSpaces` + `.fullScreenAuxiliary` at the shielding level and is ordered
+/// front via `orderFrontRegardless()`, so it layers over the *current* Space of every
+/// display — including other apps' full-screen Spaces — without stealing focus.
+///
+/// "Firm but escapable": the overlay covers every screen and captures mouse input,
+/// but we don't disable Cmd-Tab/force-quit (that needs an active `.regular` app, which
+/// reintroduces the Space-switch problem). A determined user can still escape; that's
+/// an accepted tradeoff.
 @MainActor
 final class BlockController: ObservableObject {
     @Published private(set) var isBlocking = false
@@ -26,8 +36,8 @@ final class BlockController: ObservableObject {
     private var endsAt: Date?
     private var overlays: [OverlayWindow] = []
     private var timer: Timer?
-    private var savedPolicy: NSApplication.ActivationPolicy = .accessory
     private var observers: [NSObjectProtocol] = []
+    private var lastScreenFrames: [CGRect] = []
 
     init(settings: AppSettings) {
         self.settings = settings
@@ -49,6 +59,13 @@ final class BlockController: ObservableObject {
         begin(until: Date().addingTimeInterval(settings.blockDurationSeconds))
     }
 
+    /// Debug: trigger a short block on demand, independent of accumulated usage,
+    /// so the overlay can be verified without waiting for the threshold.
+    func startTestBlock(seconds: TimeInterval = 15) {
+        guard !isBlocking else { return }
+        begin(until: Date().addingTimeInterval(seconds))
+    }
+
     /// Manual early exit (used by the debug/escape affordance).
     func endNow() {
         guard isBlocking else { return }
@@ -63,10 +80,6 @@ final class BlockController: ObservableObject {
         isBlocking = true
         clock.total = max(1, end.timeIntervalSinceNow)
 
-        savedPolicy = NSApp.activationPolicy()
-        NSApp.setActivationPolicy(.regular)
-        NSApp.activate(ignoringOtherApps: true)
-        applyPresentationOptions()
         buildOverlays()
         registerObservers()
         startTimer()
@@ -79,8 +92,6 @@ final class BlockController: ObservableObject {
         removeObservers()
         overlays.forEach { $0.orderOut(nil) }
         overlays.removeAll()
-        NSApp.presentationOptions = []
-        NSApp.setActivationPolicy(savedPolicy)
         UserDefaults.standard.removeObject(forKey: Self.key)
         endsAt = nil
         isBlocking = false
@@ -99,29 +110,36 @@ final class BlockController: ObservableObject {
         guard let endsAt else { return }
         let remaining = endsAt.timeIntervalSinceNow
         clock.remaining = max(0, remaining)
-        if remaining <= 0 { endBlock() }
+        if remaining <= 0 {
+            endBlock()
+            return
+        }
+        // Re-assert every tick so the overlay can't be buried by other windows.
+        // Cheap and a visual no-op when already frontmost.
+        for window in overlays { window.orderFrontRegardless() }
     }
 
-    // MARK: - Window + system UI
-
-    private func applyPresentationOptions() {
-        // Valid combination: hideMenuBar requires hideDock; the disable* flags
-        // are independent. Blocks Cmd-Tab, force-quit, and the Dock/menu bar.
-        NSApp.presentationOptions = [
-            .hideDock, .hideMenuBar,
-            .disableProcessSwitching, .disableForceQuit,
-            .disableSessionTermination, .disableHideApplication,
-        ]
-    }
+    // MARK: - Overlay windows
 
     private func buildOverlays() {
-        for screen in NSScreen.screens {
+        lastScreenFrames = NSScreen.screens.map(\.frame)
+        for (i, screen) in NSScreen.screens.enumerated() {
             let window = OverlayWindow(screen: screen)
             let host = NSHostingView(rootView: TouchGrassView(clock: clock))
+            // By default NSHostingView resizes its window to the SwiftUI content's
+            // intrinsic size, which shrinks/shifts the overlay off the full-screen
+            // frame. Empty sizingOptions disables that; autoresizing fills the window.
+            host.sizingOptions = []
+            host.translatesAutoresizingMaskIntoConstraints = true
+            host.autoresizingMask = [.width, .height]
             host.frame = NSRect(origin: .zero, size: screen.frame.size)
             window.contentView = host
             window.setFrame(screen.frame, display: true)
-            window.makeKeyAndOrderFront(nil)
+            // orderFrontRegardless() (not makeKeyAndOrderFront) is required: an
+            // accessory app that isn't the active app has its normal window-ordering
+            // suppressed by AppKit, so the overlay would never appear.
+            window.orderFrontRegardless()
+            if i == 0 { window.makeKey() }
             overlays.append(window)
         }
     }
@@ -133,9 +151,7 @@ final class BlockController: ObservableObject {
         ) { [weak self] _ in
             Task { @MainActor in
                 guard let self, self.isBlocking else { return }
-                NSApp.activate(ignoringOtherApps: true)
-                self.applyPresentationOptions()
-                self.overlays.first?.makeKeyAndOrderFront(nil)
+                self.overlays.forEach { $0.orderFrontRegardless() }
             }
         })
         observers.append(nc.addObserver(
@@ -143,6 +159,10 @@ final class BlockController: ObservableObject {
         ) { [weak self] _ in
             Task { @MainActor in
                 guard let self, self.isBlocking else { return }
+                // Only rebuild when the actual screen set/frames change — not on every
+                // visibleFrame change — so we don't churn the overlays needlessly.
+                let current = NSScreen.screens.map(\.frame)
+                guard current != self.lastScreenFrames else { return }
                 self.overlays.forEach { $0.orderOut(nil) }
                 self.overlays.removeAll()
                 self.buildOverlays()

@@ -26,6 +26,12 @@ struct MenuBarView: View {
                 Button("Quit") { NSApplication.shared.terminate(nil) }
             }
             .font(.callout)
+
+            if !controller.isBlocking {
+                Button("Test block (15 s)") { controller.startTestBlock() }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding(14)
         .frame(width: 280)
