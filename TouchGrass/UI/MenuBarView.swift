@@ -26,12 +26,6 @@ struct MenuBarView: View {
                 Button("Quit") { NSApplication.shared.terminate(nil) }
             }
             .font(.callout)
-
-            if !controller.isBlocking {
-                Button("Test block (15 s)") { controller.startTestBlock() }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
         }
         .padding(14)
         .frame(width: 280)
@@ -88,13 +82,10 @@ struct MenuBarView: View {
         }
     }
 
-    /// Opens the SwiftUI Settings scene across macOS 13/14+ (the `openSettings`
-    /// environment value is 14-only), by sending the standard menu action.
+    /// Opens our own settings window (reliable for a menu-bar accessory app, unlike
+    /// the SwiftUI `Settings` scene + `showSettingsWindow:` selector).
     private func openSettingsWindow() {
-        NSApp.activate(ignoringOtherApps: true)
-        if !NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil) {
-            NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
-        }
+        controller.showSettings()
     }
 
     private func minutes(_ seconds: Double) -> Int { Int((seconds / 60).rounded()) }

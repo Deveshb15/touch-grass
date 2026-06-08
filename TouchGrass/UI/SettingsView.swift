@@ -1,60 +1,114 @@
 import SwiftUI
 import AppKit
 
+/// Settings, dressed in the same magical pink dawn as the onboarding: a live dawn
+/// landscape behind a frosted card with custom rose-pink controls and pink segmented
+/// tabs. Hosted in `SettingsWindow` (pinned to light), so the system Slider/Toggle
+/// render light + pink rather than dark/muddy.
 struct SettingsView: View {
     @EnvironmentObject var controller: AppController
+    @State private var tab: Tab = .general
+
+    enum Tab: String, CaseIterable, Identifiable {
+        case general = "general", targets = "targets", permissions = "permissions"
+        var id: String { rawValue }
+    }
 
     var body: some View {
-        TabView {
-            GeneralSettings(settings: controller.settings)
-                .tabItem { Label("General", systemImage: "gearshape") }
-            TargetsSettings(catalog: controller.catalog)
-                .tabItem { Label("AI Targets", systemImage: "scope") }
-            PermissionsSettings(browser: controller.monitor.browser)
-                .tabItem { Label("Permissions", systemImage: "lock.shield") }
+        ZStack {
+            DawnBackground()
+            VStack(alignment: .leading, spacing: 14) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("settings")
+                        .font(.system(size: 23, weight: .semibold, design: .rounded))
+                        .foregroundStyle(DawnPalette.inkPrimary)
+                    Text("tune your pace, targets, and permissions.")
+                        .font(.system(size: 12, design: .rounded))
+                        .foregroundStyle(DawnPalette.inkMuted)
+                }
+                tabBar
+                ScrollView {
+                    Group {
+                        switch tab {
+                        case .general:     GeneralTab(settings: controller.settings)
+                        case .targets:     TargetsTab(catalog: controller.catalog)
+                        case .permissions: PermissionsTab(browser: controller.monitor.browser)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 2)
+                }
+                .scrollIndicators(.hidden)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .dawnCard()
         }
-        .frame(width: 470, height: 440)
+        .preferredColorScheme(.light)
+    }
+
+    private var tabBar: some View {
+        HStack(spacing: 8) {
+            ForEach(Tab.allCases) { t in
+                Button { tab = t } label: { dawnPill(t.rawValue, selected: tab == t) }
+                    .buttonStyle(.plain)
+            }
+        }
+    }
+}
+
+// MARK: - Section helper (shared by the tabs)
+
+@ViewBuilder
+private func section<C: View>(_ title: String, @ViewBuilder _ content: () -> C) -> some View {
+    VStack(alignment: .leading, spacing: 10) {
+        dawnSectionLabel(title)
+        VStack(alignment: .leading, spacing: 14) { content() }
     }
 }
 
 // MARK: - General
 
-private struct GeneralSettings: View {
+private struct GeneralTab: View {
     @ObservedObject var settings: AppSettings
     @State private var launchAtLogin = LoginItem.isEnabled
+    @FocusState private var nameFocused: Bool
 
     var body: some View {
-        Form {
-            Section("You") {
-                TextField("Your name", text: $settings.userName)
+        VStack(alignment: .leading, spacing: 20) {
+            section("you") {
+                TextField("your name", text: $settings.userName)
+                    .textFieldStyle(.plain)
+                    .font(.system(size: 15, design: .rounded))
+                    .foregroundStyle(DawnPalette.inkPrimary)
+                    .tint(DawnPalette.accentRose)
+                    .focused($nameFocused)
+                    .dawnField(focused: nameFocused)
             }
-            Section("Limits") {
-                slider("Block after", value: $settings.thresholdMinutes,
+            section("limits") {
+                slider("block after", value: $settings.thresholdMinutes,
                        range: 0.2...120, unit: "min of AI use")
-                slider("Block duration", value: $settings.blockDurationMinutes,
+                slider("block duration", value: $settings.blockDurationMinutes,
                        range: 0.2...60, unit: "min")
-                slider("Rolling window", value: $settings.windowLengthMinutes,
+                slider("rolling window", value: $settings.windowLengthMinutes,
                        range: 5...480, unit: "min", step: 5)
-                slider("Warn", value: $settings.warningLeadMinutes,
+                slider("warn", value: $settings.warningLeadMinutes,
                        range: 0...30, unit: "min before block")
-                slider("Background grace", value: $settings.backgroundGraceSeconds,
+                slider("background grace", value: $settings.backgroundGraceSeconds,
                        range: 0...900, unit: "sec", step: 15)
-                slider("Presence window", value: $settings.presenceWindowSeconds,
+                slider("presence window", value: $settings.presenceWindowSeconds,
                        range: 10...300, unit: "sec since input", step: 5)
-                slider("Agent-busy threshold", value: cpuPercentBinding,
+                slider("agent-busy threshold", value: cpuPercentBinding,
                        range: 1...50, unit: "% of a core", step: 1)
             }
-            Section {
-                Toggle("Enable monitoring", isOn: $settings.monitoringEnabled)
-                Toggle("Launch at login", isOn: $launchAtLogin)
+            section("monitoring") {
+                toggleRow("enable monitoring", isOn: $settings.monitoringEnabled)
+                toggleRow("launch at login", isOn: $launchAtLogin)
                     .onChange(of: launchAtLogin) { newValue in LoginItem.setEnabled(newValue) }
             }
         }
-        .formStyle(.grouped)
     }
 
-    /// The CLI-busy threshold is stored as a 0…1 CPU fraction but shown as a
-    /// percentage of one core, which reads far better on the slider.
+    /// CPU fraction (0…1) shown as a percentage of one core.
     private var cpuPercentBinding: Binding<Double> {
         .init(get: { settings.cliWorkingCPUFraction * 100 },
               set: { settings.cliWorkingCPUFraction = $0 / 100 })
@@ -63,99 +117,120 @@ private struct GeneralSettings: View {
     private func slider(_ title: String, value: Binding<Double>,
                         range: ClosedRange<Double>, unit: String,
                         step: Double = 0.5) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
+        // Step-less Slider draws no tick marks; we snap to `step` in the binding.
+        let snapped = Binding<Double>(
+            get: { value.wrappedValue },
+            set: { value.wrappedValue = ((($0 / step).rounded()) * step) })
+        return VStack(alignment: .leading, spacing: 5) {
             HStack {
                 Text(title)
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .foregroundStyle(DawnPalette.inkPrimary)
                 Spacer()
                 Text("\(value.wrappedValue, specifier: value.wrappedValue < 1 ? "%.1f" : "%.0f") \(unit)")
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 12, design: .rounded))
+                    .foregroundStyle(DawnPalette.inkMuted)
                     .monospacedDigit()
             }
-            Slider(value: value, in: range, step: step)
+            Slider(value: snapped, in: range)
+                .tint(DawnPalette.accentRose)
+        }
+    }
+
+    private func toggleRow(_ title: String, isOn: Binding<Bool>) -> some View {
+        HStack {
+            Text(title)
+                .font(.system(size: 13, weight: .medium, design: .rounded))
+                .foregroundStyle(DawnPalette.inkPrimary)
+            Spacer()
+            Toggle("", isOn: isOn).labelsHidden().tint(DawnPalette.accentRose)
         }
     }
 }
 
 // MARK: - Targets
 
-private struct TargetsSettings: View {
+private struct TargetsTab: View {
     @ObservedObject var catalog: TargetCatalog
     @State private var captureStatus: String?
 
     var body: some View {
-        Form {
-            Section("AI apps (bundle IDs)") {
-                EditableList(items: bundleBinding)
-                Button {
-                    captureFrontmostApp()
-                } label: {
-                    Label("Add the app I switch to (3s)…", systemImage: "plus.viewfinder")
+        VStack(alignment: .leading, spacing: 20) {
+            section("AI apps (bundle IDs)") {
+                DawnList(items: bundleBinding)
+                Button { captureFrontmostApp() } label: {
+                    dawnPrimaryLabel("add the app I switch to (3s)…", systemImage: "plus.viewfinder")
                 }
+                .buttonStyle(PressableButtonStyle())
                 if let captureStatus {
-                    Text(captureStatus).font(.caption).foregroundStyle(.secondary)
+                    Text(captureStatus)
+                        .font(.system(size: 11, design: .rounded))
+                        .foregroundStyle(DawnPalette.inkMuted)
                 }
             }
-            Section("AI command-line tools") {
-                EditableList(items: cliBinding)
-            }
-            Section("AI website domains") {
-                EditableList(items: domainBinding)
-            }
+            section("command-line tools") { DawnList(items: cliBinding) }
+            section("website domains") { DawnList(items: domainBinding) }
         }
-        .formStyle(.grouped)
     }
 
     private func captureFrontmostApp() {
-        captureStatus = "Switch to the app now…"
+        captureStatus = "switch to the app now…"
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             guard let app = NSWorkspace.shared.frontmostApplication,
                   let id = app.bundleIdentifier,
                   id != Bundle.main.bundleIdentifier else {
-                captureStatus = "Couldn't capture an app."
+                captureStatus = "couldn't capture an app."
                 return
             }
             catalog.aiBundleIDs.insert(id)
-            captureStatus = "Added \(app.localizedName ?? id) (\(id))"
+            captureStatus = "added \(app.localizedName ?? id) (\(id))"
         }
     }
 
     private var bundleBinding: Binding<[String]> {
-        .init(get: { catalog.aiBundleIDs.sorted() },
-              set: { catalog.aiBundleIDs = Set($0) })
+        .init(get: { catalog.aiBundleIDs.sorted() }, set: { catalog.aiBundleIDs = Set($0) })
     }
     private var cliBinding: Binding<[String]> {
-        .init(get: { catalog.aiCLINames.sorted() },
-              set: { catalog.aiCLINames = Set($0) })
+        .init(get: { catalog.aiCLINames.sorted() }, set: { catalog.aiCLINames = Set($0) })
     }
     private var domainBinding: Binding<[String]> {
-        .init(get: { catalog.aiDomains.sorted() },
-              set: { catalog.aiDomains = Set($0) })
+        .init(get: { catalog.aiDomains.sorted() }, set: { catalog.aiDomains = Set($0) })
     }
 }
 
-/// A simple add/remove string list editor.
-private struct EditableList: View {
+/// Add/remove string list editor, dawn-styled.
+private struct DawnList: View {
     @Binding var items: [String]
     @State private var newItem = ""
+    @FocusState private var focused: Bool
 
     var body: some View {
-        ForEach(items, id: \.self) { item in
-            HStack {
-                Text(item).font(.callout)
-                Spacer()
-                Button(role: .destructive) {
-                    items.removeAll { $0 == item }
-                } label: {
-                    Image(systemName: "minus.circle")
+        VStack(alignment: .leading, spacing: 8) {
+            ForEach(items, id: \.self) { item in
+                HStack {
+                    Text(item)
+                        .font(.system(size: 13, design: .rounded))
+                        .foregroundStyle(DawnPalette.inkPrimary)
+                    Spacer()
+                    Button { items.removeAll { $0 == item } } label: {
+                        Image(systemName: "minus.circle.fill")
+                            .foregroundStyle(DawnPalette.accentRose)
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.borderless)
             }
-        }
-        HStack {
-            TextField("Add…", text: $newItem)
-                .textFieldStyle(.roundedBorder)
-                .onSubmit(add)
-            Button("Add", action: add)
+            HStack(spacing: 8) {
+                TextField("add…", text: $newItem)
+                    .textFieldStyle(.plain)
+                    .font(.system(size: 13, design: .rounded))
+                    .foregroundStyle(DawnPalette.inkPrimary)
+                    .tint(DawnPalette.accentRose)
+                    .focused($focused)
+                    .onSubmit(add)
+                    .dawnField(focused: focused)
+                Button(action: add) { dawnPrimaryLabel("add") }
+                    .buttonStyle(PressableButtonStyle())
+            }
         }
     }
 
@@ -169,34 +244,42 @@ private struct EditableList: View {
 
 // MARK: - Permissions
 
-private struct PermissionsSettings: View {
+private struct PermissionsTab: View {
     @ObservedObject var browser: BrowserDetector
 
     var body: some View {
-        Form {
-            Section("Browser detection (Automation)") {
+        VStack(alignment: .leading, spacing: 20) {
+            section("browser detection (automation)") {
                 Text("Touch Grass reads your browser's active-tab URL to spot AI sites. macOS asks permission once per browser the first time.")
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(.system(size: 12, design: .rounded))
+                    .foregroundStyle(DawnPalette.inkMuted)
+                    .fixedSize(horizontal: false, vertical: true)
                 if browser.permissionDenied.isEmpty {
-                    Label("No denials recorded", systemImage: "checkmark.circle")
-                        .foregroundStyle(.green)
+                    statusLabel("no denials recorded", system: "checkmark.circle.fill", tint: DawnPalette.positive)
                 } else {
                     ForEach(browser.permissionDenied.sorted(), id: \.self) { app in
-                        Label("\(app): denied", systemImage: "xmark.circle")
-                            .foregroundStyle(.red)
+                        statusLabel("\(app): denied", system: "xmark.circle.fill", tint: DawnPalette.accentRose)
                     }
                 }
-                Button("Open Automation settings…") {
-                    open("x-apple.systempreferences:com.apple.preference.security?Privacy_Automation")
+                Button { open("x-apple.systempreferences:com.apple.preference.security?Privacy_Automation") } label: {
+                    dawnPrimaryLabel("open automation settings…")
                 }
+                .buttonStyle(PressableButtonStyle())
             }
-            Section("Accessibility (Firefox / fallback)") {
-                Button("Open Accessibility settings…") {
-                    open("x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")
+            section("accessibility (firefox / fallback)") {
+                Button { open("x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") } label: {
+                    dawnPrimaryLabel("open accessibility settings…")
                 }
+                .buttonStyle(PressableButtonStyle())
             }
         }
-        .formStyle(.grouped)
+    }
+
+    private func statusLabel(_ text: String, system: String, tint: Color) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: system).foregroundStyle(tint)
+            Text(text).font(.system(size: 12, design: .rounded)).foregroundStyle(DawnPalette.inkPrimary)
+        }
     }
 
     private func open(_ urlString: String) {

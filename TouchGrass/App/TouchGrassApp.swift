@@ -13,11 +13,9 @@ struct TouchGrassApp: App {
             MenuBarLabel(controller: appDelegate.controller)
         }
         .menuBarExtraStyle(.window)
-
-        Settings {
-            SettingsView()
-                .environmentObject(appDelegate.controller)
-        }
+        // Settings is presented via AppController.showSettings() in our own
+        // (light, pink) SettingsWindow — not the SwiftUI `Settings` scene, which
+        // doesn't open reliably for an accessory app and spawned a stray window.
     }
 }
 

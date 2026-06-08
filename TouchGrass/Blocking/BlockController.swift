@@ -62,13 +62,6 @@ final class BlockController: ObservableObject {
         begin(until: Date().addingTimeInterval(settings.blockDurationSeconds))
     }
 
-    /// Debug: trigger a short block on demand, independent of accumulated usage,
-    /// so the overlay can be verified without waiting for the threshold.
-    func startTestBlock(seconds: TimeInterval = 15) {
-        guard !isBlocking else { return }
-        begin(until: Date().addingTimeInterval(seconds))
-    }
-
     /// Manual early exit (used by the debug/escape affordance).
     func endNow() {
         guard isBlocking else { return }

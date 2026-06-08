@@ -25,6 +25,11 @@ final class AppController: NSObject, ObservableObject, NSWindowDelegate {
     /// Held strongly while the first-run onboarding window is on screen.
     private var onboardingWindow: OnboardingWindow?
 
+    /// Our own settings window. We host `SettingsView` in a plain `NSWindow` rather
+    /// than rely on the SwiftUI `Settings` scene + `showSettingsWindow:` selector,
+    /// which doesn't reliably open for a menu-bar accessory app.
+    private var settingsWindow: NSWindow?
+
     override init() {
         let settings = self.settings
         let catalog = self.catalog
@@ -41,7 +46,8 @@ final class AppController: NSObject, ObservableObject, NSWindowDelegate {
     }
 
     func start() {
-        Notifier.requestAuthorization()
+        // Notification permission is requested explicitly via the onboarding button,
+        // not silently at launch (an invisible prompt is easy to miss / dismiss).
         blocker.resumeIfNeeded()
         if !settings.hasOnboarded {
             presentOnboarding()          // monitoring starts once onboarding finishes
@@ -50,10 +56,23 @@ final class AppController: NSObject, ObservableObject, NSWindowDelegate {
         }
     }
 
-    /// Debug: trigger a short block immediately to verify the overlay.
-    func startTestBlock() {
-        blocker.startTestBlock()
-        isBlocking = true
+    // MARK: - Settings window
+
+    /// Open (or re-focus) the settings window so the user can change timing, etc.
+    func showSettings() {
+        if settingsWindow == nil {
+            let window = SettingsWindow()
+            let host = NSHostingView(rootView: SettingsView().environmentObject(self))
+            host.sizingOptions = []          // fill the window; don't resize it to fit
+            host.translatesAutoresizingMaskIntoConstraints = true
+            host.autoresizingMask = [.width, .height]
+            host.frame = NSRect(origin: .zero, size: window.frame.size)
+            window.contentView = host
+            settingsWindow = window
+        }
+        // Accessory apps must activate to bring a window forward and accept input.
+        NSApp.activate(ignoringOtherApps: true)
+        settingsWindow?.makeKeyAndOrderFront(nil)
     }
 
     // MARK: - First-run onboarding
@@ -149,7 +168,7 @@ final class AppController: NSObject, ObservableObject, NSWindowDelegate {
         if usage.usedSeconds >= warnAt && usage.usedSeconds < settings.thresholdSeconds {
             if !didWarn {
                 didWarn = true
-                Notifier.warnBreakComing(inMinutes: Int(settings.blockDurationMinutes.rounded()))
+                Notifier.warnBreakComing(inSeconds: settings.thresholdSeconds - usage.usedSeconds)
             }
         } else if usage.usedSeconds < warnAt {
             didWarn = false

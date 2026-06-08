@@ -39,7 +39,7 @@ final class AppSettings: ObservableObject {
         backgroundGraceSeconds = defaults.object(forKey: Keys.grace) as? Double ?? 180
         presenceWindowSeconds = defaults.object(forKey: Keys.presence) as? Double ?? 60
         cliWorkingCPUFraction = defaults.object(forKey: Keys.cliCPU) as? Double ?? 0.03
-        warningLeadMinutes = defaults.object(forKey: Keys.warningLead) as? Double ?? 5
+        warningLeadMinutes = defaults.object(forKey: Keys.warningLead) as? Double ?? 1
         monitoringEnabled = defaults.object(forKey: Keys.enabled) as? Bool ?? true
         userName = defaults.object(forKey: Keys.userName) as? String ?? ""
         hasOnboarded = defaults.object(forKey: Keys.hasOnboarded) as? Bool ?? false
