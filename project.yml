@@ -1,12 +1,12 @@
 name: TouchGrass
 options:
-  bundleIdPrefix: so.lovegpt
+  bundleIdPrefix: app
   createIntermediateGroups: true
   deploymentTarget:
     macOS: "13.0"
 settings:
   base:
-    PRODUCT_BUNDLE_IDENTIFIER: so.lovegpt.touchgrass
+    PRODUCT_BUNDLE_IDENTIFIER: app.touchgrass
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "1"
     SWIFT_VERSION: "5.0"
