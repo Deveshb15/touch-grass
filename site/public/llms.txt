@@ -1,0 +1,27 @@
+# Touch Grass
+
+> A free, open-source macOS menu-bar app that watches how much active AI time you rack up and gently makes you take a screen break when you cross your limit. Everything runs locally on your Mac.
+
+Touch Grass lives in the macOS menu bar (no Dock icon). It counts only *active* AI time — time when you are present at an AI app or website, or an AI command-line tool is genuinely working on your behalf in the background. Idle time and unrelated apps do not count. When you cross your chosen limit it gives a one-minute warning, then fills every display with a calm dawn-to-dusk landscape and a countdown until the break ends. A small plant grows while you are away. It is firm but escapable: the break always clears on its own timer, there is no anti-tamper daemon, and you can always quit the app.
+
+## Facts
+- Platform: macOS 13 or later (Apple Silicon and Intel)
+- Price: free
+- License: MIT (open source)
+- Privacy: 100% local — no analytics, no account, no servers. The only thing it reads is your browser's active-tab URL, locally, to recognize AI websites (with per-browser macOS permission).
+- Detects AI use across: native apps (e.g. Claude, ChatGPT, Cursor), terminal CLIs (e.g. claude, codex, aider, gemini), and AI websites (e.g. chatgpt.com, claude.ai, perplexity.ai)
+- Author: Devesh Bhimanpelli
+
+## Pages
+- [Home](https://touchgrass.rest/): what it is, and download
+- [How it works](https://touchgrass.rest/how-it-works): the detection model, the rolling window, the warning, and the break
+- [FAQ](https://touchgrass.rest/faq): is it free, does it track me, how it detects AI, can I skip a break, and more
+- [Download](https://touchgrass.rest/download): requirements and install steps
+- [Privacy](https://touchgrass.rest/privacy): exactly what stays on your Mac
+- [AI screen-time tracker for Mac](https://touchgrass.rest/ai-screen-time-tracker-mac): tracking AI time specifically
+- [Screen-break reminder](https://touchgrass.rest/screen-break-reminder): the gentle break mechanic
+- ["Touch grass" meaning](https://touchgrass.rest/touch-grass-meaning): the phrase, and the app named after it
+
+## Links
+- Source code: https://github.com/Deveshb15/touch-grass
+- Download (DMG): https://github.com/Deveshb15/touch-grass/releases/latest

@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
-import { GITHUB_URL } from "@/lib/site";
+import { GITHUB_URL, ROUTES, X_URL } from "@/lib/site";
 
-// Ft8 — a gentle repeating marquee that closes the page. Collapses to a single
-// static line under prefers-reduced-motion.
+// Ft8 — a gentle repeating marquee, then a real internal-link row (crawlability +
+// internal linking), then a one-line colophon. Marquee collapses under reduced-motion.
 export default function Footer() {
   const reduce = useReducedMotion();
   const phrase = "go touch some grass";
@@ -32,14 +33,26 @@ export default function Footer() {
         </div>
       )}
 
-      <div className="mx-auto mt-12 flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-6 text-sm text-ink-muted">
+      <nav className="mx-auto mt-14 flex max-w-3xl flex-wrap items-center justify-center gap-x-5 gap-y-2 px-6 text-sm font-semibold text-ink-muted">
+        {ROUTES.filter((r) => r.path !== "/").map((r) => (
+          <Link key={r.path} href={r.path} className="transition-colors hover:text-ink">
+            {r.label}
+          </Link>
+        ))}
+        <a href={GITHUB_URL} className="transition-colors hover:text-ink">GitHub&nbsp;↗</a>
+      </nav>
+
+      <div className="mx-auto mt-7 flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-6 text-sm text-ink-muted">
         <span>Touch Grass</span>
         <span aria-hidden>·</span>
-        <a href={GITHUB_URL} className="font-semibold underline-offset-4 hover:text-ink hover:underline">open source on GitHub</a>
+        <span>MIT &amp; open source</span>
         <span aria-hidden>·</span>
         <span>macOS 13+</span>
         <span aria-hidden>·</span>
-        <span>built for stepping away from the screen 🌿</span>
+        <span>
+          built by{" "}
+          <a href={X_URL} className="font-semibold underline-offset-4 hover:text-ink hover:underline">good people</a> 🌿
+        </span>
       </div>
     </footer>
   );

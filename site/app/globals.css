@@ -67,6 +67,37 @@ body {
 }
 ::selection { background: var(--color-accent); color: #fff; }
 :focus-visible { outline: 2px solid var(--color-accent-deep); outline-offset: 2px; border-radius: 3px; }
+
+/* — long-form content (FAQ / how-it-works / landing pages) — */
+.prose-tg { color: var(--color-ink); font-size: 1.075rem; line-height: 1.72; }
+.prose-tg > * + * { margin-top: 1.1em; }
+.prose-tg h2 {
+  font-family: var(--font-display); font-weight: 600; color: var(--color-accent-deep);
+  font-size: clamp(1.55rem, 3.4vw, 2.1rem); line-height: 1.1;
+  margin-top: 2.2em; margin-bottom: 0.1em;
+}
+.prose-tg h3 {
+  font-family: var(--font-display); font-weight: 600; color: var(--color-ink);
+  font-size: 1.2rem; margin-top: 1.5em; margin-bottom: 0.1em;
+}
+.prose-tg p, .prose-tg ul { max-width: 68ch; }
+.prose-tg ul { list-style: none; padding-left: 0; }
+.prose-tg li { position: relative; padding-left: 1.4em; margin-top: 0.55em; }
+.prose-tg li::before {
+  content: ""; position: absolute; left: 0; top: 0.62em;
+  width: 7px; height: 7px; border-radius: 2px; background: var(--color-sprout);
+}
+.prose-tg a {
+  color: var(--color-accent-deep); font-weight: 600;
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1.5px;
+}
+.prose-tg a:hover { color: var(--color-ink); }
+.prose-tg strong { color: var(--color-ink); font-weight: 700; }
+.prose-tg code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em;
+  background: var(--color-paper-2); padding: 0.1em 0.4em; border-radius: 6px; color: var(--color-accent-deep);
+}
+.prose-tg h2:first-child, .prose-tg h3:first-child, .prose-tg p:first-child { margin-top: 0; }
 h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.02; }
 h1, h2 { overflow-wrap: anywhere; }
 

@@ -1,6 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
+import { SITE_URL, NAME, DESCRIPTION } from "@/lib/site";
+import { ogUrl, webSiteLd, softwareApplicationLd } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
 
 const fredoka = Fredoka({
   variable: "--font-fredoka",
@@ -14,21 +17,45 @@ const nunito = Nunito({
   weight: ["400", "500", "600", "700"],
 });
 
-const description =
-  "A tiny macOS menu-bar app that notices when you've been heads-down with AI for too long — then quietly takes over the screen with a calm little landscape until you go touch some grass.";
-
 export const metadata: Metadata = {
-  metadataBase: new URL("https://github.com/Deveshb15/touch-grass"),
-  title: "Touch Grass — after too much AI, your Mac sends you outside",
-  description,
-  icons: { icon: "/shots/icon.png", apple: "/shots/icon.png" },
-  openGraph: {
-    title: "Touch Grass",
-    description,
-    images: ["/shots/block.png"],
-    type: "website",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Touch Grass — after too much AI, your Mac sends you outside",
+    template: "%s · Touch Grass",
   },
-  twitter: { card: "summary_large_image", title: "Touch Grass", description, images: ["/shots/block.png"] },
+  description: DESCRIPTION,
+  applicationName: NAME,
+  authors: [{ name: "Devesh Bhimanpelli", url: "https://x.com/Deveshb15" }],
+  creator: "Devesh Bhimanpelli",
+  keywords: [
+    "touch grass app",
+    "macOS menu bar app",
+    "AI screen time tracker Mac",
+    "screen break reminder",
+    "reduce AI usage",
+    "digital wellbeing Mac",
+  ],
+  icons: { icon: "/shots/icon.png", apple: "/shots/icon.png" },
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: NAME,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    siteName: NAME,
+    type: "website",
+    images: [{ url: ogUrl("Touch Grass", "after too much AI, your Mac sends you outside"), width: 1200, height: 630, alt: NAME }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: NAME,
+    description: DESCRIPTION,
+    creator: "@Deveshb15",
+    images: [ogUrl("Touch Grass", "after too much AI, your Mac sends you outside")],
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#fdf3ea",
 };
 
 export default function RootLayout({
@@ -36,7 +63,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${fredoka.variable} ${nunito.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <JsonLd data={[webSiteLd(), softwareApplicationLd()]} />
+        {children}
+      </body>
     </html>
   );
 }

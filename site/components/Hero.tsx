@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import DawnScene from "./DawnScene";
 import BreakScene from "./BreakScene";
 import DownloadButton from "./DownloadButton";
+import SiteHeader from "./SiteHeader";
 import { GITHUB_URL } from "@/lib/site";
 
 export default function Hero() {
@@ -19,18 +19,7 @@ export default function Hero() {
     <section className="relative isolate overflow-hidden">
       <DawnScene />
 
-      {/* minimal brand bar (N1) — transparent over the dawn, not a sticky hairline bar */}
-      <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 pt-7">
-        <span className="flex items-center gap-2.5">
-          <Image src="/shots/icon.png" alt="" width={36} height={36} className="rounded-[9px]" />
-          <span className="font-display text-lg font-semibold" style={{ color: "var(--color-accent-deep)" }}>
-            touch&nbsp;grass
-          </span>
-        </span>
-        <a href={GITHUB_URL} className="text-sm font-semibold text-ink-muted transition-colors hover:text-ink">
-          GitHub&nbsp;↗
-        </a>
-      </header>
+      <SiteHeader />
 
       <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-6 pb-24 pt-12 md:grid-cols-[1.05fr_0.95fr] md:pb-32 md:pt-20">
         {/* text column */}

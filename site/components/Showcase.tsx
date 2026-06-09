@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { OnboardingMock, SettingsMock } from "./AppMock";
 
 function Copy({ kicker, title, children }: { kicker: string; title: string; children: React.ReactNode }) {
@@ -21,6 +22,12 @@ export default function Showcase() {
           It watches how much <em className="not-italic font-bold text-sprout-deep">active</em> AI time you rack up —
           apps, terminal tools, AI sites — and when you cross your limit, it sits you down for a few minutes outside.
         </p>
+        <Link
+          href="/how-it-works"
+          className="mt-6 inline-block font-semibold text-sprout-deep underline-offset-4 hover:underline"
+        >
+          See how it works →
+        </Link>
       </div>
 
       {/* set your pace */}
