@@ -23,7 +23,7 @@ export default function Ethos() {
   return (
     <section className="mt-16 md:mt-24" style={{ background: "var(--color-paper-2)" }}>
       <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
-        <div className="max-w-xl">
+        <div className="mx-auto max-w-xl text-center">
           <h2 className="text-[clamp(2rem,5vw,3rem)] leading-[1.04]" style={{ color: "var(--color-accent-deep)" }}>
             Honest by design.
           </h2>
