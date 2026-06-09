@@ -123,6 +123,12 @@ TouchGrass/
 
 <br/>
 
+## License
+
+[MIT](LICENSE) © 2026 Devesh Bhimanpelli. Free to use, modify, and share — just keep the copyright notice.
+
+<br/>
+
 <div align="center">
 Made to get you off the screen for a few minutes. 🌿
 </div>
