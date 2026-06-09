@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+/* Hallmark · genre: playful · macrostructure: Marquee Hero · theme: custom (pink dawn)
+ * enrichment: hand-built CSS dawn (Tier A/B) · nav: N1 minimal · footer: Ft8 marquee
+ * custom: vibe "calm pink dawn, soft, alive" · paper oklch(97% .016 65) ·
+ *   accent oklch(81% .091 3) warm-rose · display Fredoka + body Nunito
+ * axes: paper-band light · display rounded-sans · accent warm-rose
+ * pre-emit critique: P5 H5 E5 S4 R4 V5
+ */
+
+@theme {
+  /* — Pink-dawn palette (from the app's DawnTheme.swift → OKLCH) — */
+  --color-sky-top: oklch(90.1% 0.035 322.9);
+  --color-sky-hi: oklch(90.7% 0.035 4.6);
+  --color-sky-mid: oklch(93.2% 0.030 46.3);
+  --color-paper: oklch(97.0% 0.016 64.7);
+  --color-paper-2: oklch(94.6% 0.022 40);
+  --color-accent: oklch(81.2% 0.091 2.7);
+  --color-accent-deep: oklch(44.9% 0.087 354.4);
+  --color-ink: oklch(43.7% 0.050 311.8);
+  --color-ink-muted: oklch(64.9% 0.052 312.8);
+  --color-sprout: oklch(69.4% 0.175 138.9);
+  --color-sprout-deep: oklch(57.6% 0.150 141.2);
+  --color-sun: oklch(86.8% 0.068 57.3);
+  --color-cta: oklch(87.6% 0.057 3.3);
+  --color-cta-b: oklch(90.6% 0.047 57.8);
+  --color-line: oklch(50% 0.04 320 / 0.14);
+
+  --font-display: var(--font-fredoka);
+  --font-body: var(--font-nunito);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --radius-card: 26px;
+}
+
+/* — base — */
+html, body { overflow-x: clip; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: var(--color-accent); color: #fff; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.02; }
+h1, h2 { overflow-wrap: anywhere; }
+
+/* — the living dawn (hand-built; deliberately a landscape, not a mesh blob) — */
+.dawn-sky {
+  background:
+    radial-gradient(125% 80% at 74% 4%, oklch(99.5% 0.02 70 / 0.9), transparent 46%),
+    linear-gradient(to bottom,
+      var(--color-sky-top) 0%,
+      var(--color-sky-hi) 32%,
+      var(--color-sky-mid) 60%,
+      var(--color-paper) 100%);
+}
+.sun {
+  background: radial-gradient(closest-side, #fff 6%, var(--color-sun) 40%, transparent 72%);
+  animation: sun-breathe 7s var(--ease-in-out) infinite;
+  will-change: transform, opacity;
+}
+.cloud {
+  background: radial-gradient(closest-side, oklch(100% 0 0 / 0.82), transparent);
+  filter: blur(3px);
+}
+.drift-a { animation: drift 30s var(--ease-in-out) infinite alternate; }
+.drift-b { animation: drift 38s var(--ease-in-out) infinite alternate-reverse; }
+.bird { animation: fly linear infinite; will-change: transform; }
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+
+@keyframes sun-breathe { 0%, 100% { transform: scale(0.97); opacity: 0.92; } 50% { transform: scale(1.06); opacity: 1; } }
+@keyframes drift { from { transform: translateX(-3%); } to { transform: translateX(3%); } }
+@keyframes fly { from { transform: translate(-14vw, 0); } to { transform: translate(118vw, 0); } }
+
+/* — Ft8 marquee footer — */
+.marquee-track { animation: marquee 30s linear infinite; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .sun, .drift-a, .drift-b, .bird, .marquee-track { animation: none !important; }
+}
