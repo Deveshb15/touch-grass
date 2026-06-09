@@ -22,17 +22,17 @@ const points: { h: string; p: string }[] = [
 export default function Ethos() {
   return (
     <section className="mt-16 md:mt-24" style={{ background: "var(--color-paper-2)" }}>
-      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-20 md:grid-cols-[0.85fr_1.15fr] md:gap-16 md:py-28">
-        <div>
+      <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
+        <div className="max-w-xl">
           <h2 className="text-[clamp(2rem,5vw,3rem)] leading-[1.04]" style={{ color: "var(--color-accent-deep)" }}>
             Honest by design.
           </h2>
-          <p className="mt-4 max-w-xs text-[1.05rem] text-ink-muted">
+          <p className="mt-4 text-[1.05rem] text-ink-muted">
             The whole thing is one small, calm idea — held to it carefully.
           </p>
         </div>
 
-        <ul className="grid gap-px overflow-hidden rounded-card" style={{ background: "var(--color-line)" }}>
+        <ul className="mt-10 grid gap-px overflow-hidden rounded-card md:mt-12 md:grid-cols-2" style={{ background: "var(--color-line)" }}>
           {points.map((pt) => (
             <li key={pt.h} className="flex gap-4 p-6 md:p-7" style={{ background: "var(--color-paper)" }}>
               <span aria-hidden className="mt-2 h-3 w-3 shrink-0 rounded-[4px]" style={{ background: "var(--color-sprout)" }} />

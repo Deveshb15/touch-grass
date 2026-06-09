@@ -20,7 +20,7 @@ export default function DawnScene() {
     <div className="dawn-sky absolute inset-0 overflow-hidden" aria-hidden>
       {/* the glowing sun on its arc */}
       <div className="sun absolute rounded-full"
-        style={{ width: "min(46vw, 420px)", height: "min(46vw, 420px)", top: "-8%", right: "6%" }} />
+        style={{ width: "min(46vw, 420px)", height: "min(46vw, 420px)", top: "-10%", left: "4%" }} />
 
       {/* soft drifting clouds */}
       <div className="cloud drift-a absolute rounded-full" style={{ width: "34vw", height: "9vw", top: "20%", left: "-6%" }} />

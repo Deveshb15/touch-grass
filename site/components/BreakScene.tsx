@@ -26,7 +26,7 @@ export default function BreakScene() {
       }}
     >
       {/* glowing sun */}
-      <div className="scene-sun absolute rounded-full" style={{ width: "26%", aspectRatio: "1 / 1", top: "10%", right: "11%" }} />
+      <div className="scene-sun absolute rounded-full" style={{ width: "26%", aspectRatio: "1 / 1", top: "11%", left: "10%" }} />
 
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 250" preserveAspectRatio="xMidYMax slice" aria-hidden>
         <defs>
@@ -43,8 +43,8 @@ export default function BreakScene() {
 
         {/* a couple of drifting gulls */}
         <g fill="none" style={{ stroke: C("bird") }} strokeWidth="1.4" strokeLinecap="round" opacity="0.5">
-          <path d="M64 66 q6 -6 12 0 q6 -6 12 0" />
-          <path d="M118 54 q5 -5 10 0 q5 -5 10 0" />
+          <path d="M262 60 q6 -6 12 0 q6 -6 12 0" />
+          <path d="M312 50 q5 -5 10 0 q5 -5 10 0" />
         </g>
 
         {/* swaying grass */}
