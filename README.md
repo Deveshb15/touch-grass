@@ -10,7 +10,7 @@ A tiny menu-bar app that notices when you've been heads-down with AI for too lon
 then quietly takes over the screen with a calm little landscape and a countdown,
 until you go touch some grass. 🌱
 
-[**↓ Download for macOS**](https://github.com/Deveshb15/touch-grass/releases/latest) &nbsp;·&nbsp; macOS 13+ &nbsp;·&nbsp; Apple Silicon &amp; Intel &nbsp;·&nbsp; signed &amp; notarized
+[**↓ Download for macOS**](https://github.com/Deveshb15/touch-grass/releases/latest) &nbsp;·&nbsp; macOS 13+ &nbsp;·&nbsp; Apple Silicon &amp; Intel
 
 <br/>
 
@@ -59,8 +59,7 @@ it's a nudge with a nice view.
 2. Open it and drag **Touch Grass** into your **Applications** folder.
 3. Launch it from Applications — look for the 🌱 in your menu bar (it has no Dock icon).
 
-It's signed with an Apple **Developer ID** and **notarized** by Apple, so it opens with no
-Gatekeeper warnings. Requires **macOS 13** or later.
+Requires **macOS 13** or later.
 
 > **Good to know:** while a break is on, the overlay covers every display and Cmd-Tab is
 > disabled for its duration — that's the point. It always clears itself on its own timer, and
@@ -99,9 +98,7 @@ xcodegen generate          # regenerate TouchGrass.xcodeproj from project.yml
 xcodebuild -project TouchGrass.xcodeproj -scheme TouchGrass -configuration Debug build
 ```
 
-Or `open TouchGrass.xcodeproj` and hit ⌘R. Builds are signed with an Apple Development identity
-by default (set in `project.yml`); the released DMG is re-signed with a Developer ID and
-notarized.
+Or `open TouchGrass.xcodeproj` and hit ⌘R. Signing identity is set in `project.yml`.
 
 The app's artwork is generated, reproducibly, from small SwiftUI tools — `Tools/IconExport.swift`
 (the clay-sprout app icon) and `Tools/DMGBackground.swift` (the disk-image "drag to Applications"
