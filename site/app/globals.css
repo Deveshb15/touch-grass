@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 /* Hallmark · genre: playful · macrostructure: Marquee Hero · theme: custom (pink dawn)
- * enrichment: hand-built CSS dawn (Tier A/B) · nav: N1 minimal · footer: Ft8 marquee
+ * enrichment: hand-built CSS/SVG dawn + live break scene (sprout grows → sways, Tier A/B) · nav: N1 minimal · footer: Ft8 marquee
  * custom: vibe "calm pink dawn, soft, alive" · paper oklch(97% .016 65) ·
  *   accent oklch(81% .091 3) warm-rose · display Fredoka + body Nunito
  * axes: paper-band light · display rounded-sans · accent warm-rose
- * pre-emit critique: P5 H5 E5 S4 R4 V5
+ * pre-emit critique: P5 H5 E5 S5 R4 V5
+ * audit fixes: focus-visible (g26) · single-signal hover (g13) · reduced-motion (g27) · aria on scene (g33) · no fake chrome (g47)
  */
 
 @theme {
@@ -35,6 +36,25 @@
   --radius-card: 26px;
 }
 
+/* Live "break" scene palette (from PlantView.swift / SkyPalette.swift, golden hour).
+   Declared on :root — NOT @theme — so they survive Tailwind's theme tree-shaking and
+   resolve inside SVG fill/stroke (used only via var() in inline styles). sRGB hex so
+   SVG paint is reliable. */
+:root {
+  --color-scene-sky-top: #e9b98e;
+  --color-scene-sky-bot: #fbe9d6;
+  --color-scene-sun: #f4954f;
+  --color-scene-hill: #e2b083;
+  --color-scene-shore: #9a7a5e;
+  --color-scene-shore-deep: #5e4b3a;
+  --color-scene-stem: #6e7a55;
+  --color-scene-leaf: #869a66;
+  --color-scene-leaf-light: #9bae7b;
+  --color-scene-petal: #e8a87c;
+  --color-scene-petal-core: #f2c879;
+  --color-scene-bird: #4a3f30;
+}
+
 /* — base — */
 html, body { overflow-x: clip; }
 html { scroll-behavior: smooth; }
@@ -46,6 +66,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--color-accent); color: #fff; }
+:focus-visible { outline: 2px solid var(--color-accent-deep); outline-offset: 2px; border-radius: 3px; }
 h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.02; }
 h1, h2 { overflow-wrap: anywhere; }
 
@@ -80,11 +101,28 @@ h1, h2 { overflow-wrap: anywhere; }
 @keyframes drift { from { transform: translateX(-3%); } to { transform: translateX(3%); } }
 @keyframes fly { from { transform: translate(-14vw, 0); } to { transform: translate(118vw, 0); } }
 
+/* — live "break" scene: a sprout that grows on load, then sways in the wind — */
+.scene-sun {
+  background: radial-gradient(closest-side, #fff 8%, var(--color-scene-sun) 46%, transparent 74%);
+  animation: sun-breathe 7s var(--ease-in-out) infinite;
+  will-change: transform, opacity;
+}
+.plant-grow { transform-box: fill-box; transform-origin: bottom center; animation: plant-grow 1.5s var(--ease-out) both; }
+.plant-sway { transform-box: fill-box; transform-origin: bottom center; animation: plant-sway 6.5s var(--ease-in-out) infinite alternate; }
+.leaf-flutter { transform-box: fill-box; transform-origin: bottom center; animation: leaf-flutter 4.8s var(--ease-in-out) infinite alternate; }
+.blade { transform-box: fill-box; transform-origin: bottom center; animation: grass-sway 5s var(--ease-in-out) infinite alternate; }
+
+@keyframes plant-grow { 0% { transform: scaleY(0.16); opacity: 0; } 55% { opacity: 1; } 100% { transform: scaleY(1); opacity: 1; } }
+@keyframes plant-sway { from { transform: rotate(-2.4deg); } to { transform: rotate(2.6deg); } }
+@keyframes leaf-flutter { from { transform: rotate(-1.6deg); } to { transform: rotate(1.8deg); } }
+@keyframes grass-sway { from { transform: rotate(-5deg); } to { transform: rotate(6deg); } }
+
 /* — Ft8 marquee footer — */
 .marquee-track { animation: marquee 30s linear infinite; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .sun, .drift-a, .drift-b, .bird, .marquee-track { animation: none !important; }
+  .sun, .drift-a, .drift-b, .bird, .marquee-track,
+  .scene-sun, .plant-grow, .plant-sway, .leaf-flutter, .blade { animation: none !important; }
 }

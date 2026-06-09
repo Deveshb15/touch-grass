@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import DawnScene from "./DawnScene";
+import BreakScene from "./BreakScene";
 import DownloadButton from "./DownloadButton";
 import { GITHUB_URL } from "@/lib/site";
 
@@ -75,23 +76,15 @@ export default function Hero() {
           </motion.p>
         </motion.div>
 
-        {/* the break, floating */}
-        <motion.figure
+        {/* the break — a live, growing-then-swaying sprout (not a static screenshot) */}
+        <motion.div
           initial={{ opacity: 0, y: reduce ? 0 : 30, rotate: reduce ? 0 : -1.5 }}
           animate={{ opacity: 1, y: 0, rotate: reduce ? 0 : -1.5 }}
           transition={{ duration: reduce ? 0.2 : 0.9, ease, delay: reduce ? 0 : 0.25 }}
-          className="md:justify-self-end"
+          className="w-full"
         >
-          <Image
-            src="/shots/block.png"
-            alt="A Touch Grass break: a calm golden-hour landscape with a growing plant and a countdown"
-            width={1760}
-            height={1100}
-            priority
-            className="h-auto w-full max-w-[560px] rounded-[20px]"
-            style={{ boxShadow: "0 40px 80px -30px oklch(44.9% 0.087 354.4 / 0.45)" }}
-          />
-        </motion.figure>
+          <BreakScene />
+        </motion.div>
       </div>
     </section>
   );

@@ -23,7 +23,7 @@ export default function DownloadButton({ size = "lg" }: { size?: "lg" | "md" }) 
         color: "var(--color-accent-deep)",
         boxShadow: "0 14px 34px -14px oklch(81.2% 0.091 2.7 / 0.85), inset 0 0 0 1px oklch(100% 0 0 / 0.6)",
       }}
-      whileHover={reduce ? undefined : { y: -2, scale: 1.02 }}
+      whileHover={reduce ? undefined : { y: -2 }}
       whileTap={reduce ? undefined : { scale: 0.97 }}
       transition={{ type: "spring", stiffness: 420, damping: 22 }}
     >
