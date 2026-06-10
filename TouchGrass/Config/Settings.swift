@@ -9,7 +9,19 @@ final class AppSettings: ObservableObject {
     private let defaults = UserDefaults.standard
 
     /// Active-AI minutes (within the rolling window) that trigger a block.
-    @Published var thresholdMinutes: Double { didSet { defaults.set(thresholdMinutes, forKey: Keys.threshold) } }
+    @Published var thresholdMinutes: Double {
+        didSet {
+            defaults.set(thresholdMinutes, forKey: Keys.threshold)
+            // Keep the stored window from falling below the reachable floor when the
+            // threshold is raised, so the Settings slider mirrors the effective window
+            // (see `windowLengthSeconds`). One-directional — editing the window never
+            // writes back here — so there's no didSet feedback loop. didSet does not
+            // fire for the initial assignment in init(), so launch loads are untouched.
+            if windowLengthMinutes < thresholdMinutes * 2 {
+                windowLengthMinutes = thresholdMinutes * 2
+            }
+        }
+    }
     /// How long the "touch grass" block lasts once triggered.
     @Published var blockDurationMinutes: Double { didSet { defaults.set(blockDurationMinutes, forKey: Keys.blockDuration) } }
     /// Length of the rolling window the threshold is measured against.
@@ -47,7 +59,17 @@ final class AppSettings: ObservableObject {
 
     var thresholdSeconds: Double { thresholdMinutes * 60 }
     var blockDurationSeconds: Double { blockDurationMinutes * 60 }
-    var windowLengthSeconds: Double { windowLengthMinutes * 60 }
+    /// The rolling window the threshold is measured against, in seconds.
+    ///
+    /// `usedSeconds` is a count of one-second ticks *inside* this window, so it can
+    /// never exceed the window. If the window were ≤ the threshold the block could
+    /// only fire at a 100%-impossible duty cycle (every single second counted, with
+    /// zero gaps) and so would effectively never trigger — the menu bar just sits
+    /// pinned at "N/N min" forever. Onboarding already widens to 2× the threshold;
+    /// we enforce the same floor here so the independent Settings sliders can't
+    /// recreate an unreachable pair. Applied at read time, so it also retroactively
+    /// repairs any window/threshold already persisted below the floor.
+    var windowLengthSeconds: Double { max(windowLengthMinutes, thresholdMinutes * 2) * 60 }
     var warningLeadSeconds: Double { warningLeadMinutes * 60 }
 
     private enum Keys {
