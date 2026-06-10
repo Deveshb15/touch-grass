@@ -36,5 +36,20 @@
 	<false/>
 	<key>NSSupportsSuddenTermination</key>
 	<false/>
+	<!-- Sparkle auto-update. Feed is served from GitHub Pages (docs/appcast.xml);
+	     SUPublicEDKey is the EdDSA public key whose private half (in the login
+	     keychain) signs each DMG via scripts/release.sh. -->
+	<key>SUFeedURL</key>
+	<string>https://deveshb15.github.io/touch-grass/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>twVxJcgKa1TiNb9AlIj/hia3ts2AD98hfGyZF7H0qJ4=</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
+	<key>SUAutomaticallyUpdate</key>
+	<false/>
+	<key>SUShowReleaseNotes</key>
+	<true/>
 </dict>
 </plist>

@@ -9,6 +9,7 @@ struct TouchGrassApp: App {
         MenuBarExtra {
             MenuBarView()
                 .environmentObject(appDelegate.controller)
+                .environmentObject(appDelegate.updater)
         } label: {
             MenuBarLabel(controller: appDelegate.controller)
         }
@@ -23,6 +24,7 @@ struct TouchGrassApp: App {
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let controller = AppController()
+    let updater = SparkleUpdater()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         controller.start()

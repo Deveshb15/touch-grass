@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>TouchGrass</title>
+        <item>
+            <title>0.1.1</title>
+            <pubDate>Wed, 10 Jun 2026 18:40:00 +0530</pubDate>
+            <link>https://github.com/Deveshb15/touch-grass</link>
+            <sparkle:version>2</sparkle:version>
+            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/Deveshb15/touch-grass/releases/download/v0.1.1/TouchGrass-0.1.1.dmg" length="4387950" type="application/octet-stream" sparkle:edSignature="TYi1wDi7SkRFV2noHFsrTSFI05iWNc5gFxPTXnFsKg7c/LG601aePA/oSq0q837xfM8QZMZS/yIdF3pMg0GDAg=="/>
+        </item>
+    </channel>
+</rss>
