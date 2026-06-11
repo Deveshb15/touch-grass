@@ -12,6 +12,7 @@ final class AppController: NSObject, ObservableObject, NSWindowDelegate {
     let usage: UsageTracker
     let monitor: ActivityMonitor
     let blocker: BlockController
+    let updater = SparkleUpdater()
 
     // Mirrored state for the menu-bar UI (refreshed each sample).
     @Published private(set) var currentActivity: AIActivity = .none
@@ -62,7 +63,9 @@ final class AppController: NSObject, ObservableObject, NSWindowDelegate {
     func showSettings() {
         if settingsWindow == nil {
             let window = SettingsWindow()
-            let host = NSHostingView(rootView: SettingsView().environmentObject(self))
+            let host = NSHostingView(rootView: SettingsView()
+                .environmentObject(self)
+                .environmentObject(updater))
             host.sizingOptions = []          // fill the window; don't resize it to fit
             host.translatesAutoresizingMaskIntoConstraints = true
             host.autoresizingMask = [.width, .height]

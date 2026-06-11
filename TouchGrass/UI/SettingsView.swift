@@ -70,6 +70,7 @@ private func section<C: View>(_ title: String, @ViewBuilder _ content: () -> C) 
 
 private struct GeneralTab: View {
     @ObservedObject var settings: AppSettings
+    @EnvironmentObject var updater: SparkleUpdater
     @State private var launchAtLogin = LoginItem.isEnabled
     @FocusState private var nameFocused: Bool
 
@@ -104,6 +105,13 @@ private struct GeneralTab: View {
                 toggleRow("enable monitoring", isOn: $settings.monitoringEnabled)
                 toggleRow("launch at login", isOn: $launchAtLogin)
                     .onChange(of: launchAtLogin) { newValue in LoginItem.setEnabled(newValue) }
+            }
+            section("updates") {
+                Button { updater.checkForUpdates() } label: {
+                    dawnPrimaryLabel("check for updates…", systemImage: "arrow.triangle.2.circlepath")
+                }
+                .buttonStyle(PressableButtonStyle())
+                .disabled(!updater.canCheckForUpdates)
             }
         }
     }

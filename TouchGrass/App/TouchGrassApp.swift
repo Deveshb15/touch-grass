@@ -9,7 +9,6 @@ struct TouchGrassApp: App {
         MenuBarExtra {
             MenuBarView()
                 .environmentObject(appDelegate.controller)
-                .environmentObject(appDelegate.updater)
         } label: {
             MenuBarLabel(controller: appDelegate.controller)
         }

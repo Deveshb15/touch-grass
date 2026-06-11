@@ -2,7 +2,6 @@ import SwiftUI
 
 struct MenuBarView: View {
     @EnvironmentObject var controller: AppController
-    @EnvironmentObject var updater: SparkleUpdater
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -23,8 +22,6 @@ struct MenuBarView: View {
 
             HStack {
                 Button("Settings…") { openSettingsWindow() }
-                Button("Check for Updates…") { updater.checkForUpdates() }
-                    .disabled(!updater.canCheckForUpdates)
                 Spacer()
                 Button("Quit") { NSApplication.shared.terminate(nil) }
             }
