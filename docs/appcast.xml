@@ -3,6 +3,27 @@
     <channel>
         <title>TouchGrass</title>
         <item>
+            <title>0.1.2</title>
+            <pubDate>Thu, 11 Jun 2026 13:51:24 +0530</pubDate>
+            <link>https://github.com/Deveshb15/touch-grass</link>
+            <sparkle:version>3</sparkle:version>
+            <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font: 13px -apple-system, system-ui, sans-serif; color: #1d1d1f; margin: 0;">
+  <h2 style="font-size: 15px; margin: 0 0 8px;">Touch Grass 0.1.2</h2>
+  <ul style="margin: 0; padding-left: 18px; line-height: 1.5;">
+    <li>Moved <strong>Check for Updates</strong> out of the menu-bar popover and into
+        <strong>Settings → General</strong>, so the menu stays focused on your AI usage.</li>
+  </ul>
+</body>
+</html>
+]]></description>
+            <enclosure url="https://github.com/Deveshb15/touch-grass/releases/download/v0.1.2/TouchGrass-0.1.2.dmg" length="4407702" type="application/octet-stream" sparkle:edSignature="Bl/y+pZissfgaPh9EYZC8wza+/TJnxE53726/mB346fALmqcQHwzQ008ihRedp5mRIB7rSKfvcGMeHNY/Y5fAA=="/>
+        </item>
+        <item>
             <title>0.1.1</title>
             <pubDate>Wed, 10 Jun 2026 18:40:00 +0530</pubDate>
             <link>https://github.com/Deveshb15/touch-grass</link>
