@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import posthog from "posthog-js";
 import { DMG_URL } from "@/lib/site";
 
 function AppleMark() {
@@ -16,6 +17,11 @@ export default function DownloadButton() {
   return (
     <motion.a
       href={DMG_URL}
+      onClick={() => {
+        if (process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+          posthog.capture("touch_grass_download_started");
+        }
+      }}
       className="inline-flex items-center gap-2.5 rounded-full bg-accent-deep py-3.5 pr-6 pl-5 text-lg font-medium text-paper shadow-[0_12px_30px_-12px] shadow-accent-deep/60 focus-visible:outline-accent-deep focus-visible:outline-offset-2 sm:py-3 sm:text-base"
       whileHover={reduce ? undefined : { y: -1.5 }}
       whileTap={reduce ? undefined : { scale: 0.98 }}
