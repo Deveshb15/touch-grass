@@ -11,7 +11,8 @@ export const metadata: Metadata = pageMeta({
   description:
     "Touch Grass has no analytics, no account, and no server. Everything runs on your Mac. The only thing it reads is the address of your browser’s current tab, locally, to recognize AI websites.",
   path: "/privacy",
-  ogEyebrow: "privacy",
+  ogTitle: "Nothing leaves your Mac.",
+  ogEyebrow: "Privacy",
 });
 
 export default function Privacy() {

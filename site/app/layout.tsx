@@ -45,14 +45,14 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: NAME,
     type: "website",
-    images: [{ url: ogUrl("Touch Grass", TAGLINE), width: 1200, height: 630, alt: NAME }],
+    images: [{ url: ogUrl("The Mac app that sends you outside.", "A small, free Mac app"), width: 1200, height: 630, alt: NAME }],
   },
   twitter: {
     card: "summary_large_image",
     title: NAME,
     description: DESCRIPTION,
     creator: "@Deveshb15",
-    images: [ogUrl("Touch Grass", TAGLINE)],
+    images: [ogUrl("The Mac app that sends you outside.", "A small, free Mac app")],
   },
 };
 

@@ -12,7 +12,8 @@ export const metadata: Metadata = pageMeta({
   description:
     "Answers about Touch Grass: whether it is free, whether it tracks you, how it detects AI use, whether background agent time counts, how to get out of a break, and which Macs it runs on.",
   path: "/faq",
-  ogEyebrow: "frequently asked",
+  ogTitle: "Questions people ask before installing.",
+  ogEyebrow: "Touch Grass FAQ",
 });
 
 const qa: { q: string; a: string }[] = [

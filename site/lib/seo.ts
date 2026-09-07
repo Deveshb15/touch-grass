@@ -19,7 +19,7 @@ export function pageMeta(opts: {
   ogEyebrow?: string;
 }): Metadata {
   const url = new URL(opts.path, SITE_URL).toString();
-  const image = ogUrl(opts.ogTitle ?? opts.title, opts.ogEyebrow);
+  const image = ogUrl(opts.ogTitle ?? opts.title, opts.ogEyebrow ?? "Touch Grass");
   return {
     title: opts.title,
     description: opts.description,

@@ -10,7 +10,8 @@ export const metadata: Metadata = pageMeta({
   description:
     "How Touch Grass measures active AI time in apps, the terminal, and the browser, counts only the seconds you are engaged, warns you a minute ahead, and then takes over the screen for a short break.",
   path: "/how-it-works",
-  ogEyebrow: "how it works",
+  ogTitle: "It counts your AI time. Then it takes the screen.",
+  ogEyebrow: "How Touch Grass works",
 });
 
 export default function HowItWorks() {

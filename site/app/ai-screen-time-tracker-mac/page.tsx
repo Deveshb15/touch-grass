@@ -10,7 +10,8 @@ export const metadata: Metadata = pageMeta({
   description:
     "Touch Grass is a free AI screen time tracker for Mac. Instead of generic screen time, it measures the minutes you actually spend with AI in apps, the terminal, and the browser, then nudges you to take a break.",
   path: "/ai-screen-time-tracker-mac",
-  ogEyebrow: "for macOS",
+  ogTitle: "Know where your AI time goes.",
+  ogEyebrow: "AI screen time tracker for Mac",
 });
 
 export default function AiScreenTimeTracker() {

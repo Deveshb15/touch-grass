@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMeta({
   description: DEFINITION,
   path: "/touch-grass-meaning",
   ogTitle: "What “touch grass” means",
-  ogEyebrow: "internet slang",
+  ogEyebrow: "Internet slang",
 });
 
 export default function TouchGrassMeaning() {

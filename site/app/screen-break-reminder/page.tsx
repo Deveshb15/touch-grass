@@ -10,7 +10,8 @@ export const metadata: Metadata = pageMeta({
   description:
     "Touch Grass is a screen break reminder for Mac. After too much AI it gives a one minute warning, then fills the screen with a calm landscape and a countdown until the break is over.",
   path: "/screen-break-reminder",
-  ogEyebrow: "for macOS",
+  ogTitle: "A screen break you cannot swipe away.",
+  ogEyebrow: "Screen break reminder for Mac",
 });
 
 export default function ScreenBreakReminder() {

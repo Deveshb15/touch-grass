@@ -11,7 +11,8 @@ export const metadata: Metadata = pageMeta({
   description:
     "Download Touch Grass free for macOS 13 or later, Apple Silicon and Intel. Open the disk image, drag it to Applications, and look for the sprout in your menu bar.",
   path: "/download",
-  ogEyebrow: "download",
+  ogTitle: "Download Touch Grass for Mac.",
+  ogEyebrow: "Free and open source",
 });
 
 export default function Download() {
