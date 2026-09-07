@@ -19,7 +19,7 @@ export default function DownloadButton() {
       href={DMG_URL}
       onClick={() => {
         if (process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN && process.env.NEXT_PUBLIC_POSTHOG_HOST) {
-          posthog.capture("touch_grass_download_started");
+          posthog.capture("touch_grass_download_clicked");
         }
       }}
       className="inline-flex items-center gap-2.5 rounded-full bg-accent-deep py-3.5 pr-6 pl-5 text-lg font-medium text-paper shadow-[0_12px_30px_-12px] shadow-accent-deep/60 focus-visible:outline-accent-deep focus-visible:outline-offset-2 sm:py-3 sm:text-base"
