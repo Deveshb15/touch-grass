@@ -2,11 +2,12 @@
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import DawnScene from "./DawnScene";
-import BreakScene from "./BreakScene";
 import DownloadButton from "./DownloadButton";
 import SiteHeader from "./SiteHeader";
 import { GITHUB_URL } from "@/lib/site";
 
+// Drop a screen recording of a break at public/shots/break.mp4 (and optionally
+// break.webm). Until the file exists the poster frame (the real screenshot) shows.
 export default function Hero() {
   const reduce = useReducedMotion();
   const rise = (y: number): Variants => ({
@@ -14,66 +15,69 @@ export default function Hero() {
     show: { opacity: 1, y: 0 },
   });
   const ease: [number, number, number, number] = [0.16, 1, 0.3, 1];
+  const t = { duration: reduce ? 0.2 : 0.8, ease };
 
   return (
     <section className="relative isolate overflow-hidden">
       <DawnScene />
-
       <SiteHeader />
 
-      <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-6 pb-24 pt-12 md:grid-cols-[1.05fr_0.95fr] md:pb-32 md:pt-20">
-        {/* text column */}
+      <div className="relative z-10 mx-auto max-w-6xl px-6 pt-16 sm:pt-20 md:pt-24">
         <motion.div
           initial="hidden"
           animate="show"
           transition={{ staggerChildren: reduce ? 0 : 0.09, delayChildren: 0.05 }}
+          className="flex flex-col items-center text-center"
         >
           <motion.h1
             variants={rise(20)}
-            transition={{ duration: reduce ? 0.2 : 0.8, ease }}
-            className="font-display font-semibold leading-[0.95] tracking-[-0.02em]"
-            style={{ color: "var(--color-accent-deep)", fontSize: "clamp(3rem, 10vw, 7rem)" }}
+            transition={t}
+            className="max-w-[16ch] font-display text-6xl text-balance text-accent-deep sm:text-7xl md:text-8xl"
           >
-            touch grass
+            The Mac app that sends you <em>outside</em>.
           </motion.h1>
 
-          <motion.p
-            variants={rise(16)}
-            transition={{ duration: reduce ? 0.2 : 0.8, ease }}
-            className="mt-5 max-w-md text-[1.2rem] leading-snug text-ink"
-          >
-            After too much AI, your Mac gently sends you outside.
+          <motion.p variants={rise(16)} transition={t} className="mt-6 max-w-[44ch] text-xl/8 text-pretty text-ink">
+            It keeps count of the time you actually spend with AI. Past your limit, every screen turns into a quiet
+            field for a few minutes. Then it gives your Mac back.
           </motion.p>
 
-          <motion.div
-            variants={rise(16)}
-            transition={{ duration: reduce ? 0.2 : 0.8, ease }}
-            className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
-          >
+          <motion.div variants={rise(16)} transition={t} className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
             <DownloadButton />
-            <a href={GITHUB_URL} className="font-semibold text-ink-muted underline-offset-4 hover:text-ink hover:underline">
-              View on GitHub
+            <a
+              href={GITHUB_URL}
+              className="text-lg font-medium text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink sm:text-base"
+            >
+              Read the source
             </a>
           </motion.div>
 
-          <motion.p
-            variants={rise(12)}
-            transition={{ duration: reduce ? 0.2 : 0.8, ease }}
-            className="mt-4 text-sm text-ink-muted"
-          >
-            Free &middot; macOS 13+ &middot; Apple Silicon &amp; Intel
+          <motion.p variants={rise(12)} transition={t} className="mt-4 text-base text-ink-muted sm:text-[0.9375rem]">
+            Free and open source. macOS 13 or later, Apple Silicon and Intel.
           </motion.p>
         </motion.div>
 
-        {/* the break — a live, growing-then-swaying sprout (not a static screenshot) */}
-        <motion.div
-          initial={{ opacity: 0, y: reduce ? 0 : 30, rotate: reduce ? 0 : -1.5 }}
-          animate={{ opacity: 1, y: 0, rotate: reduce ? 0 : -1.5 }}
-          transition={{ duration: reduce ? 0.2 : 0.9, ease, delay: reduce ? 0 : 0.25 }}
-          className="w-full"
+        {/* the break, as it actually looks */}
+        <motion.figure
+          initial={{ opacity: 0, y: reduce ? 0 : 32 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduce ? 0.2 : 1, ease, delay: reduce ? 0 : 0.35 }}
+          className="mx-auto mt-14 max-w-5xl pb-20 sm:mt-16 md:mt-20 md:pb-28"
         >
-          <BreakScene />
-        </motion.div>
+          <video
+            className="aspect-[16/10] w-full rounded-[min(2vw,20px)] object-cover shadow-[0_50px_100px_-40px] shadow-accent-deep/60 outline-1 -outline-offset-1 outline-black/10"
+            poster="/shots/block.png"
+            autoPlay={!reduce}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label="A screen recording of a Touch Grass break: a peach dawn sky, a young plant, and a four minute countdown under the words “the grass misses you, Devesh.”"
+          >
+            <source src="/shots/break.webm" type="video/webm" />
+            <source src="/shots/break.mp4" type="video/mp4" />
+          </video>
+        </motion.figure>
       </div>
     </section>
   );

@@ -8,7 +8,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "How it works",
   description:
-    "How Touch Grass measures active AI time across apps, terminal tools, and AI sites — counting only when you’re engaged — then gives a one-minute warning and a gentle, escapable full-screen break.",
+    "How Touch Grass measures active AI time in apps, the terminal, and the browser, counts only the seconds you are engaged, warns you a minute ahead, and then takes over the screen for a short break.",
   path: "/how-it-works",
   ogEyebrow: "how it works",
 });
@@ -20,56 +20,55 @@ export default function HowItWorks() {
         crumb="How it works"
         path="/how-it-works"
         title="How Touch Grass works"
-        lede="It watches one thing — how much active AI time you’re racking up — and turns it into a gentle, unavoidable nudge to step away from the screen."
+        lede="It watches one number, the time you spend with AI, and turns it into a break you cannot scroll past."
       />
 
       <article className="prose-tg mx-auto max-w-3xl px-6 pb-8">
         <h2>What counts as AI time</h2>
-        <p>Once a second, Touch Grass looks at what’s frontmost on your Mac and decides whether it’s AI:</p>
+        <p>Once a second, Touch Grass looks at whatever is frontmost on your Mac and asks whether it is AI.</p>
         <ul>
-          <li><strong>Apps</strong> are matched by bundle id — things like Claude, ChatGPT, and Cursor.</li>
-          <li>A frontmost <strong>terminal</strong> is scanned for AI command-line tools — <code>claude</code>, <code>codex</code>, <code>aider</code>, <code>gemini</code> — including interpreter-hosted ones like <code>node …/claude</code>.</li>
-          <li>A frontmost <strong>browser</strong> has its active-tab URL read (locally) and matched against AI domains like chatgpt.com, claude.ai, and perplexity.ai.</li>
+          <li><strong>Apps</strong> are matched by bundle id. Claude, ChatGPT, Cursor, and so on.</li>
+          <li>A frontmost <strong>terminal</strong> is checked for AI command line tools such as <code>claude</code>, <code>codex</code>, <code>aider</code>, and <code>gemini</code>. That includes ones running under an interpreter, like <code>node …/claude</code>.</li>
+          <li>A frontmost <strong>browser</strong> has the address of its current tab read locally and compared against a list of AI domains like chatgpt.com, claude.ai, and perplexity.ai.</li>
         </ul>
 
-        <h2>Only when you’re actually engaged</h2>
+        <h2>Only while you are actually there</h2>
         <p>
-          A second only counts when you’re <strong>present</strong> — recent keyboard or mouse activity — at an AI
-          surface, <strong>or</strong> when an AI command-line tool is genuinely working on your behalf in the
-          background (using CPU). Idle time and unrelated apps don’t count, so the number reflects real AI use, not just
-          a window left open.
+          A second counts when you are <strong>present</strong> at an AI surface, meaning there was recent keyboard or
+          mouse activity. It also counts when an AI command line tool is <strong>working in the background</strong> and
+          using CPU, even if you are not typing. A window left open in the corner does not count. Neither does an
+          unrelated app.
         </p>
 
-        <h2>A rolling window you can’t game by quitting</h2>
+        <h2>A rolling window</h2>
         <p>
-          Counted seconds accumulate in a sliding window, and that progress is saved to disk. Quitting and relaunching
-          doesn’t reset it — you pick up where you left off.
+          Counted seconds add up inside a sliding window that you choose. The running total is saved to disk, so
+          quitting and relaunching does not reset it. You pick up where you left off.
         </p>
 
-        <h2>A minute’s warning, first</h2>
+        <h2>A warning, one minute ahead</h2>
         <p>
-          Before a break lands, Touch Grass taps you on the shoulder a minute ahead. Nothing yanks the screen out from
-          under you mid-sentence — you get time to finish your thought and save your work.
+          Before a break, a small notice appears. You get time to finish the thought and save your work. Nothing
+          happens mid-sentence.
         </p>
 
         <h2>The break</h2>
         <p>
-          When you cross your limit, every display fills with a slow dawn-to-dusk landscape and a countdown. A little
-          plant grows while you’re away. For its duration the overlay covers all screens and Cmd-Tab is paused — that’s
-          the point. Its end time is saved too, so if you quit mid-break it simply resumes the remaining time when you
-          come back.
+          When you cross the limit, every display fills with a slow dawn to dusk landscape and a countdown. A small
+          plant grows while you are away. The overlay covers all screens and Cmd-Tab is paused for the duration, which
+          is rather the point. The end time is saved too, so if you quit mid-break it resumes the remaining time when
+          you relaunch.
         </p>
 
-        <h2>Firm, but never a trap</h2>
+        <h2>Firm, but not a trap</h2>
         <p>
-          There’s no anti-tamper daemon and nothing sketchy running in the background. The break always clears itself on
-          its own timer, and a determined you can always quit the app. It’s a nudge with a nice view, not a cage.
+          There is no anti-tamper daemon and nothing running that you cannot see. The break always clears on its own
+          timer, and you can quit the app whenever you like. It is meant to be a nudge with a nice view.
         </p>
 
         <p>
-          Curious about the details? See the <Link href="/faq">FAQ</Link>, read about{" "}
-          <Link href="/privacy">privacy</Link>, or <Link href="/download">download it</Link> and try a tiny limit to
-          watch it work.
+          Still curious? Read the <Link href="/faq">FAQ</Link> or the <Link href="/privacy">privacy page</Link>, or{" "}
+          <Link href="/download">download it</Link>, set a tiny limit, and watch it happen.
         </p>
       </article>
 

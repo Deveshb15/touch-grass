@@ -1,4 +1,4 @@
-// A hand-built, living pink dawn — the app's own backdrop, recreated in CSS/SVG.
+// The app's pink dawn backdrop, recreated in CSS and SVG.
 // Deliberately a landscape (sky + sun + clouds + birds + grain), not a mesh blob.
 // Decorative only; animation pauses under prefers-reduced-motion (see globals.css).
 
@@ -7,7 +7,7 @@ function Bird({ top, left, scale, dur, delay }: { top: string; left: string; sca
     <svg
       className="bird absolute"
       style={{ top, left, animationDuration: `${dur}s`, animationDelay: `${delay}s`, transform: `scale(${scale})` }}
-      width="34" height="12" viewBox="0 0 34 12" fill="none" aria-hidden
+      width="34" height="12" viewBox="0 0 34 12" fill="none" aria-hidden="true"
     >
       <path d="M1 9C5 2 9 2 12 8C15 2 19 2 23 9" stroke="oklch(64.9% 0.052 312.8)" strokeWidth="1.6"
         strokeLinecap="round" opacity="0.55" />
@@ -17,7 +17,7 @@ function Bird({ top, left, scale, dur, delay }: { top: string; left: string; sca
 
 export default function DawnScene() {
   return (
-    <div className="dawn-sky absolute inset-0 overflow-hidden" aria-hidden>
+    <div className="dawn-sky absolute inset-0 overflow-hidden" aria-hidden="true">
       {/* the glowing sun on its arc */}
       <div className="sun absolute rounded-full"
         style={{ width: "min(46vw, 420px)", height: "min(46vw, 420px)", top: "-10%", left: "4%" }} />

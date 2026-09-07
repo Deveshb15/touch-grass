@@ -4,12 +4,12 @@ import PageShell from "@/components/PageShell";
 import PageHero from "@/components/PageHero";
 import DownloadButton from "@/components/DownloadButton";
 import { pageMeta } from "@/lib/seo";
-import { GITHUB_URL } from "@/lib/site";
+import { GITHUB_URL, RELEASES_URL, VERSION } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "Download for Mac",
   description:
-    "Download Touch Grass free for macOS 13 or later (Apple Silicon & Intel). A one-minute install: open the DMG, drag it to Applications, and look for the sprout in your menu bar.",
+    "Download Touch Grass free for macOS 13 or later, Apple Silicon and Intel. Open the disk image, drag it to Applications, and look for the sprout in your menu bar.",
   path: "/download",
   ogEyebrow: "download",
 });
@@ -20,52 +20,56 @@ export default function Download() {
       <PageHero
         crumb="Download"
         path="/download"
-        title="Download Touch Grass for Mac"
-        lede="Free, notarized, and about a minute to set up. Grab the latest disk image and you’re moments away from your first break."
+        title="Download Touch Grass"
+        lede="Free, notarized, and about a minute from download to first break."
       />
 
       <div className="mx-auto max-w-3xl px-6">
-        <div className="flex flex-col items-start gap-3">
-          <DownloadButton />
-          <p className="text-sm text-ink-muted">Free &middot; macOS 13+ &middot; Apple Silicon &amp; Intel</p>
-        </div>
+        <DownloadButton />
+        <p className="mt-4 text-base text-ink-muted sm:text-[0.9375rem]">
+          Version {VERSION}. macOS 13 or later, Apple Silicon and Intel.{" "}
+          <a href={RELEASES_URL} className="underline decoration-ink/30 underline-offset-3 hover:text-ink hover:decoration-ink">
+            All releases
+          </a>
+        </p>
       </div>
 
-      <article className="prose-tg mx-auto mt-12 max-w-3xl px-6 pb-8">
+      <article className="prose-tg mx-auto mt-14 max-w-3xl px-6 pb-8">
         <h2>Requirements</h2>
         <ul>
           <li>macOS 13 (Ventura) or later</li>
           <li>Apple Silicon or Intel</li>
-          <li>A few megabytes of disk — it’s a tiny menu-bar app</li>
+          <li>A few megabytes of disk space</li>
         </ul>
 
         <h2>Install</h2>
-        <ul>
-          <li>Download the latest <code>TouchGrass-x.y.z.dmg</code> from the download button above (it points at GitHub Releases).</li>
-          <li>Open the disk image and drag <strong>Touch Grass</strong> into your <strong>Applications</strong> folder.</li>
-          <li>Launch it from Applications — look for the sprout in your menu bar. There’s no Dock icon.</li>
-        </ul>
+        <ol>
+          <li>Download the disk image using the button above. It points at GitHub Releases.</li>
+          <li>Open it and drag <strong>Touch Grass</strong> into your <strong>Applications</strong> folder.</li>
+          <li>Launch it from Applications and look for the sprout in your menu bar. There is no Dock icon.</li>
+        </ol>
 
-        <h2>The first run</h2>
+        <h2>Trying it out</h2>
         <p>
-          Want to see it work safely? Set a tiny limit and break length in Settings and trigger a quick break. While a
-          break is on, the overlay covers every display and Cmd-Tab is paused for its duration — that’s intentional. It
-          always clears itself on its own timer, and quitting mid-break just resumes the remaining time on relaunch.
+          To see a break without waiting, set a very small limit and break length in Settings. While a break is on,
+          the overlay covers every display and Cmd-Tab is paused. It always clears on its own timer, and quitting
+          mid-break resumes the remaining time on relaunch.
         </p>
         <p>
-          To recognize AI websites, macOS will ask once per browser for permission to read the active-tab URL. That
-          read happens locally and never leaves your Mac — see <Link href="/privacy">privacy</Link> for the details.
+          The first time it sees a browser, macOS will ask for permission to read the address of the current tab.
+          That happens on your Mac and goes no further. The <Link href="/privacy">privacy page</Link> has the
+          details.
         </p>
 
-        <h2>Updating &amp; uninstalling</h2>
+        <h2>Updating and uninstalling</h2>
         <ul>
-          <li><strong>Update:</strong> download the newer DMG and drag the new app over the old one in Applications.</li>
-          <li><strong>Uninstall:</strong> quit from the menu bar (or <code>killall TouchGrass</code>), then drag Touch Grass from Applications to the Trash. Nothing keeps running in the background.</li>
+          <li><strong>Update:</strong> the app checks for new versions itself. You can also download a newer disk image and drag it over the old app.</li>
+          <li><strong>Uninstall:</strong> quit from the menu bar (or <code>killall TouchGrass</code>), then move Touch Grass from Applications to the Trash. Nothing keeps running.</li>
         </ul>
 
         <p>
-          New here? Read <Link href="/how-it-works">how it works</Link>, skim the <Link href="/faq">FAQ</Link>, or view
-          the <a href={GITHUB_URL}>source on GitHub</a>.
+          New here? Read <Link href="/how-it-works">how it works</Link>, skim the <Link href="/faq">FAQ</Link>, or
+          look at the <a href={GITHUB_URL}>source on GitHub</a>.
         </p>
       </article>
     </PageShell>

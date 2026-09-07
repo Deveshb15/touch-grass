@@ -5,11 +5,12 @@ import PageHero from "@/components/PageHero";
 import CtaStrip from "@/components/CtaStrip";
 import JsonLd from "@/components/JsonLd";
 import { pageMeta, faqPageLd } from "@/lib/seo";
+import { ISSUES_URL } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "FAQ",
   description:
-    "Answers about Touch Grass: is it free, does it track you, how it detects AI use, whether background agent time counts, how to skip a break, macOS support, and more.",
+    "Answers about Touch Grass: whether it is free, whether it tracks you, how it detects AI use, whether background agent time counts, how to get out of a break, and which Macs it runs on.",
   path: "/faq",
   ogEyebrow: "frequently asked",
 });
@@ -17,59 +18,59 @@ export const metadata: Metadata = pageMeta({
 const qa: { q: string; a: string }[] = [
   {
     q: "Is Touch Grass free?",
-    a: "Yes — completely free and open source under the MIT license. There’s no paid tier, no account, and no ads.",
+    a: "Yes. It is free and open source under the MIT license. There is no paid tier, no account, and no ads.",
   },
   {
     q: "Which Macs does it run on?",
-    a: "macOS 13 (Ventura) or later, on both Apple Silicon and Intel Macs.",
+    a: "macOS 13 (Ventura) or later, on both Apple Silicon and Intel.",
   },
   {
     q: "Does it track me or send my data anywhere?",
-    a: "No. Everything stays on your Mac — no analytics, no network calls, no account, no servers. The only thing it ever reads is your browser’s active-tab URL, locally, to recognize AI sites.",
+    a: "No. There are no analytics, no network calls, no account, and no server. The only thing it reads is the address of your browser’s current tab, on your Mac, to recognize AI websites.",
   },
   {
     q: "How does it detect AI usage?",
-    a: "Once a second it checks what’s frontmost: apps are matched by bundle id, a frontmost terminal is scanned for AI command-line tools (including interpreter-hosted ones like node …/claude), and a frontmost browser’s active-tab URL is matched against AI domains.",
+    a: "Once a second it checks what is frontmost. Apps are matched by bundle id. A frontmost terminal is checked for AI command line tools, including ones running under an interpreter like node …/claude. A frontmost browser has its current tab’s address compared against a list of AI domains.",
   },
   {
-    q: "Does time count when I’m not at the keyboard?",
-    a: "A second counts only when you’re present (recent keyboard or mouse activity) at an AI surface, or when an AI command-line tool is genuinely working in the background. Idle time and unrelated apps don’t count.",
+    q: "Does time count when I am away from the keyboard?",
+    a: "A second counts only when you are present at an AI surface, meaning recent keyboard or mouse activity, or when an AI command line tool is actively working in the background. Idle time and unrelated apps do not count.",
   },
   {
-    q: "Does background agent time count — like a long Claude or Codex run?",
-    a: "Yes. If an AI CLI is genuinely working on your behalf and using CPU, that time counts even when you’re not typing.",
+    q: "Does background agent time count, like a long Claude or Codex run?",
+    a: "Yes. If an AI command line tool is working on your behalf and using CPU, that time counts even while you are not typing.",
   },
   {
     q: "Can I change the limit and the break length?",
-    a: "Yes. In Settings you can change the limit, the rolling window, the break length, the warning lead time, and exactly what counts as “AI” — which apps, which command-line tools, and which websites.",
+    a: "Yes. Settings lets you change the limit, the rolling window, the break length, the warning lead time, and exactly which apps, terminal tools, and websites count as AI.",
   },
   {
-    q: "Can I skip or escape a break?",
-    a: "The break always clears itself on its own timer. There’s no anti-tamper daemon, so if you truly need out you can quit the app (killall TouchGrass); quitting mid-break just resumes the remaining time when you relaunch.",
+    q: "Can I skip or get out of a break?",
+    a: "A break always clears on its own timer. There is no anti-tamper daemon, so if you really need out you can quit the app (killall TouchGrass). If you quit mid-break, the remaining time resumes when you relaunch.",
   },
   {
     q: "How is it different from Screen Time or a website blocker?",
-    a: "It measures active AI time specifically — across native apps, terminal tools, and AI sites — counts only the time you’re actually engaged, and nudges you with a calming full-screen break instead of a hard block list. It’s independent of Apple’s Screen Time and doesn’t touch your Apple account.",
+    a: "It measures AI time specifically, across native apps, terminal tools, and AI websites, and counts only the time you are actually engaged. Instead of a block list it gives you a short full-screen break. It is independent of Apple’s Screen Time and does not touch your Apple account.",
   },
   {
-    q: "Will it lock me out or block me forever?",
-    a: "No. A break lasts only as long as you set, then clears automatically. It’s a nudge, not a cage.",
+    q: "Will it lock me out for good?",
+    a: "No. A break lasts exactly as long as you set, then clears by itself.",
   },
   {
     q: "Is it notarized and safe to install?",
-    a: "It’s distributed as a notarized macOS disk image. Download the DMG from GitHub Releases, open it, drag Touch Grass to your Applications folder, and launch it.",
+    a: "Yes. It ships as a notarized macOS disk image. Download the DMG from GitHub Releases, open it, drag Touch Grass to Applications, and launch it.",
   },
   {
     q: "Does it have a Dock icon?",
-    a: "No — it lives quietly in the menu bar (look for the sprout). There’s no Dock icon and nothing in the way.",
+    a: "No. It lives in the menu bar, where you will see a small sprout. There is nothing in the Dock.",
   },
   {
     q: "Why does it ask permission to read my browser tabs?",
-    a: "To recognize AI websites, macOS asks once per browser for Automation permission to read the active-tab URL. It’s read locally, matched on-device, and never stored or sent. Denials are shown in Settings → Permissions.",
+    a: "To recognize AI websites, macOS asks once per browser for Automation permission so the app can read the address of the current tab. That address is compared on your Mac and never stored or sent. If you decline, it simply will not detect AI sites in that browser. Denials are listed under Settings, then Permissions.",
   },
   {
-    q: "Where’s the source code?",
-    a: "On GitHub, under the MIT license, so you can read exactly what it does and build it yourself.",
+    q: "Where is the source code?",
+    a: "On GitHub, under the MIT license. You can read exactly what it does and build it yourself.",
   },
 ];
 
@@ -80,20 +81,22 @@ export default function FAQ() {
       <PageHero
         crumb="FAQ"
         path="/faq"
-        title="Frequently asked questions"
-        lede="Everything people usually want to know before they install — what it counts, what it doesn’t, and what it never does with your data."
+        title="Questions people ask"
+        lede="What it counts, what it does not, and what it never does with your data."
       />
 
-      <div className="prose-tg mx-auto max-w-3xl px-6 pb-8">
-        {qa.map(({ q, a }) => (
-          <div key={q}>
-            <h2 className="!text-[1.3rem]" style={{ color: "var(--color-ink)" }}>{q}</h2>
-            <p>{a}</p>
-          </div>
-        ))}
-        <p>
-          Still wondering something? Read <Link href="/how-it-works">how it works</Link> or open an issue on{" "}
-          <Link href="/download">the project</Link>.
+      <div className="mx-auto max-w-3xl px-6 pb-8">
+        <dl className="divide-y divide-line">
+          {qa.map(({ q, a }) => (
+            <div key={q} className="py-7 first:pt-0">
+              <dt className="max-w-[40ch] text-xl font-semibold text-balance text-ink">{q}</dt>
+              <dd className="mt-3 max-w-[64ch] text-lg/7 text-pretty text-ink-muted sm:text-base/7">{a}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="prose-tg mt-10">
+          Something else? Read <Link href="/how-it-works">how it works</Link> or{" "}
+          <a href={ISSUES_URL}>open an issue on GitHub</a>.
         </p>
       </div>
 

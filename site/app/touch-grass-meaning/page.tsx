@@ -7,7 +7,7 @@ import JsonLd from "@/components/JsonLd";
 import { pageMeta, definedTermLd } from "@/lib/seo";
 
 const DEFINITION =
-  "“Touch grass” is internet slang — a usually playful nudge telling someone to log off, step outside, and reconnect with the physical world after spending too long online.";
+  "“Touch grass” is internet slang. It is a usually playful way of telling someone to log off, step outside, and reconnect with the physical world after spending too long online.";
 
 export const metadata: Metadata = pageMeta({
   title: "What “touch grass” means",
@@ -22,7 +22,7 @@ export default function TouchGrassMeaning() {
     <PageShell>
       <JsonLd data={definedTermLd({ term: "touch grass", definition: DEFINITION })} />
       <PageHero
-        crumb="“Touch grass” meaning"
+        crumb="What “touch grass” means"
         path="/touch-grass-meaning"
         title="What does “touch grass” mean?"
         lede={DEFINITION}
@@ -31,31 +31,30 @@ export default function TouchGrassMeaning() {
       <article className="prose-tg mx-auto max-w-3xl px-6 pb-8">
         <h2>The short version</h2>
         <p>
-          To <strong>touch grass</strong> is to step away from the screen and back into the real world. It’s most often
-          said half-jokingly to someone who seems too online — too deep in a feed, an argument, or a screen — as a way
-          of saying: go outside, breathe, get some perspective. Taken literally, it’s exactly what it sounds like —
-          go outside and put your hand on some actual grass.
+          To <strong>touch grass</strong> is to step away from the screen and back into the real world. People say it,
+          usually half joking, to someone who seems too online: too deep in a feed, an argument, or a screen. Go
+          outside, breathe, get some perspective. Taken literally it means exactly what it says. Go outside and put
+          your hand on some actual grass.
         </p>
 
         <h2>Where it comes from</h2>
         <p>
-          It’s internet slang that spread across social platforms over the last several years, usually as a gentle
-          (sometimes cheeky) reality check. The image is deliberately simple: the antidote to being chronically online
-          is something as ordinary as the grass outside your door.
+          It spread across social platforms over the last several years as a gentle, sometimes cheeky, reality check.
+          The image is deliberately ordinary. The cure for being chronically online is the grass outside your door.
         </p>
 
         <h2>How people use it</h2>
         <ul>
-          <li>“You’ve been doomscrolling for three hours — go touch grass.”</li>
+          <li>“You have been doomscrolling for three hours. Go touch grass.”</li>
           <li>“Logging off to touch some grass. Back later.”</li>
-          <li>A friendly sign-off after a long, very-online day.</li>
+          <li>A friendly sign off after a long, very online day.</li>
         </ul>
 
         <h2>An app that helps you actually do it</h2>
         <p>
-          <strong>Touch Grass</strong> is a free macOS app named after the phrase — and built to honor it. After too
-          much active AI time, it gently sends you outside: a one-minute warning, then a calm full-screen break until
-          you step away. It’s the difference between being told to touch grass and being kindly nudged to.
+          <strong>Touch Grass</strong> is a free macOS app named after the phrase. After too much active AI time it
+          gives you a one minute warning, then fills the screen with a calm landscape until the break is over. It is
+          the difference between being told to touch grass and being walked to the door.
         </p>
         <p>
           See <Link href="/how-it-works">how it works</Link>, read the <Link href="/faq">FAQ</Link>, or{" "}
@@ -63,7 +62,7 @@ export default function TouchGrassMeaning() {
         </p>
       </article>
 
-      <CtaStrip heading="Go on — touch some grass" />
+      <CtaStrip heading="Go on, touch some grass." />
     </PageShell>
   );
 }

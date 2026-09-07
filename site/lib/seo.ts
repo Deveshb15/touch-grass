@@ -36,7 +36,7 @@ export function pageMeta(opts: {
   };
 }
 
-// ——— JSON-LD builders (schema.org). No fabricated ratings/reviews/counts. ———
+// JSON-LD builders (schema.org). No fabricated ratings, reviews, or counts.
 
 const author = { "@type": "Person", name: AUTHOR, url: AUTHOR_URL };
 

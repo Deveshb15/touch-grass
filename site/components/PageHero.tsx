@@ -2,8 +2,8 @@ import Link from "next/link";
 import JsonLd from "./JsonLd";
 import { breadcrumbLd } from "@/lib/seo";
 
-// Content-page header: a visible breadcrumb + title + lede, plus the matching
-// BreadcrumbList structured data.
+// Content-page header: a visible breadcrumb, the title, and a lede, plus the
+// matching BreadcrumbList structured data.
 export default function PageHero({
   title,
   lede,
@@ -16,20 +16,17 @@ export default function PageHero({
   path: string;
 }) {
   return (
-    <div className="mx-auto max-w-3xl px-6 pt-14 pb-8 md:pt-16">
+    <div className="mx-auto max-w-3xl px-6 pt-14 pb-10 md:pt-20">
       <JsonLd data={breadcrumbLd([{ name: "Home", path: "/" }, { name: crumb, path }])} />
-      <nav className="flex items-center gap-2 text-sm text-ink-muted" aria-label="Breadcrumb">
+      <nav className="flex items-center gap-2 text-base text-ink-muted sm:text-[0.9375rem]" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-ink">Home</Link>
-        <span aria-hidden>›</span>
-        <span style={{ color: "var(--color-ink)" }}>{crumb}</span>
+        <span aria-hidden="true">/</span>
+        <span className="text-ink">{crumb}</span>
       </nav>
-      <h1
-        className="mt-5 font-display font-semibold leading-[1.05] tracking-[-0.01em]"
-        style={{ color: "var(--color-accent-deep)", fontSize: "clamp(2.3rem, 5.5vw, 3.6rem)" }}
-      >
+      <h1 className="mt-6 max-w-[20ch] font-display text-5xl text-balance text-accent-deep sm:text-6xl">
         {title}
       </h1>
-      <p className="mt-5 max-w-2xl text-[1.2rem] leading-snug text-ink-muted">{lede}</p>
+      <p className="mt-5 max-w-[48ch] text-xl/8 text-pretty text-ink-muted">{lede}</p>
     </div>
   );
 }

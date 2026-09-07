@@ -1,14 +1,14 @@
 import DownloadButton from "./DownloadButton";
 
-export default function CtaStrip({ heading = "Time to touch grass?" }: { heading?: string }) {
+export default function CtaStrip({ heading = "Ready to go outside?" }: { heading?: string }) {
   return (
-    <div className="mx-auto max-w-3xl px-6 py-20 text-center md:py-28">
-      <h2 className="font-display font-semibold" style={{ color: "var(--color-accent-deep)", fontSize: "clamp(1.9rem, 5vw, 3rem)" }}>
-        {heading}
-      </h2>
-      <div className="mt-7 flex flex-col items-center gap-3">
-        <DownloadButton />
-        <p className="text-sm text-ink-muted">Free &middot; macOS 13+ &middot; Apple Silicon &amp; Intel</p>
+    <div className="border-t border-line">
+      <div className="mx-auto flex max-w-3xl flex-col items-center px-6 py-20 text-center md:py-24">
+        <h2 className="max-w-[20ch] font-display text-5xl text-balance text-accent-deep sm:text-6xl">{heading}</h2>
+        <div className="mt-8">
+          <DownloadButton />
+        </div>
+        <p className="mt-4 text-base text-ink-muted sm:text-[0.9375rem]">Free and open source. macOS 13 or later.</p>
       </div>
     </div>
   );

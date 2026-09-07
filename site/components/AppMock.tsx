@@ -1,4 +1,4 @@
-// Crisp, code-built recreations of the app's onboarding + settings screens — no
+// Crisp, code-built recreations of the app's onboarding + settings screens : no
 // screenshots, no fake OS chrome. They reuse the site's DawnTheme tokens + fonts so
 // they read as the real app. Display-only (not interactive). aria-labelled figures.
 
@@ -58,8 +58,8 @@ function Chip({ children, on }: { children: ReactNode; on?: boolean }) {
 
 export function OnboardingMock() {
   return (
-    <Panel label="The Touch Grass onboarding — set your name, your pace, and your break length">
-      <h3 className="font-display text-[1.45rem] font-semibold" style={{ color: "var(--color-ink)" }}>let&rsquo;s set your pace</h3>
+    <Panel label="The Touch Grass onboarding : set your name, your pace, and your break length">
+      <h3 className="text-[1.4rem] font-semibold tracking-tight text-ink">let&rsquo;s set your pace</h3>
       <p className="mt-1 text-[0.82rem] text-ink-muted">three quick things, then we touch grass.</p>
 
       <div className="mt-4 space-y-1.5">
@@ -116,8 +116,8 @@ function SliderRow({ label, value, fill }: { label: string; value: string; fill:
 
 export function SettingsMock() {
   return (
-    <Panel label="The Touch Grass settings — tune your pace, AI targets, and permissions">
-      <h3 className="font-display text-[1.35rem] font-semibold" style={{ color: "var(--color-ink)" }}>settings</h3>
+    <Panel label="The Touch Grass settings : tune your pace, AI targets, and permissions">
+      <h3 className="text-[1.3rem] font-semibold tracking-tight text-ink">settings</h3>
       <p className="mt-1 text-[0.8rem] text-ink-muted">tune your pace, targets, and permissions.</p>
 
       <div className="mt-3 flex gap-1.5">

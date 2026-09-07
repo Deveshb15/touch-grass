@@ -1,26 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Fredoka, Nunito } from "next/font/google";
+import { Instrument_Serif, Figtree } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, NAME, DESCRIPTION } from "@/lib/site";
+import { SITE_URL, NAME, DESCRIPTION, TAGLINE } from "@/lib/site";
 import { ogUrl, webSiteLd, softwareApplicationLd } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
 
-const fredoka = Fredoka({
-  variable: "--font-fredoka",
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Touch Grass — after too much AI, your Mac sends you outside",
+    default: `Touch Grass: ${TAGLINE}`,
     template: "%s · Touch Grass",
   },
   description: DESCRIPTION,
@@ -43,14 +45,14 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: NAME,
     type: "website",
-    images: [{ url: ogUrl("Touch Grass", "after too much AI, your Mac sends you outside"), width: 1200, height: 630, alt: NAME }],
+    images: [{ url: ogUrl("Touch Grass", TAGLINE), width: 1200, height: 630, alt: NAME }],
   },
   twitter: {
     card: "summary_large_image",
     title: NAME,
     description: DESCRIPTION,
     creator: "@Deveshb15",
-    images: [ogUrl("Touch Grass", "after too much AI, your Mac sends you outside")],
+    images: [ogUrl("Touch Grass", TAGLINE)],
   },
 };
 
@@ -62,8 +64,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fredoka.variable} ${nunito.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className={`${instrumentSerif.variable} ${figtree.variable} h-full antialiased`}>
+      <body className="isolate flex min-h-full flex-col">
         <JsonLd data={[webSiteLd(), softwareApplicationLd()]} />
         {children}
       </body>

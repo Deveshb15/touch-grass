@@ -1,58 +1,73 @@
-import Link from "next/link";
 import { OnboardingMock, SettingsMock } from "./AppMock";
 
-function Copy({ kicker, title, children }: { kicker: string; title: string; children: React.ReactNode }) {
+const steps: { title: string; body: string }[] = [
+  {
+    title: "It keeps count.",
+    body:
+      "Time in Claude, ChatGPT, Cursor, an AI command line tool, or an AI website goes on the clock. Only while you are actually there. Idle minutes are free.",
+  },
+  {
+    title: "It warns you first.",
+    body:
+      "A minute before a break, a small notice shows up so you can finish your sentence and save your work.",
+  },
+  {
+    title: "It takes the screen.",
+    body:
+      "Every display turns into a slow dawn with a countdown. When the timer runs out, everything comes back exactly as you left it.",
+  },
+];
+
+function Split({
+  eyebrow,
+  title,
+  children,
+  media,
+  flip,
+}: {
+  eyebrow: string;
+  title: string;
+  children: React.ReactNode;
+  media: React.ReactNode;
+  flip?: boolean;
+}) {
   return (
-    <div className="max-w-md">
-      <span className="font-semibold text-sprout-deep">{kicker}</span>
-      <h2 className="mt-2 text-[clamp(1.9rem,4.5vw,2.8rem)]" style={{ color: "var(--color-accent-deep)" }}>
-        {title}
-      </h2>
-      <p className="mt-4 text-[1.1rem] leading-relaxed text-ink">{children}</p>
+    <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
+      <div className={flip ? "md:order-2" : ""}>
+        <p className="text-base font-medium text-sprout-deep sm:text-[0.9375rem]">{eyebrow}</p>
+        <h2 className="mt-3 max-w-[20ch] font-display text-5xl text-balance text-accent-deep">{title}</h2>
+        <p className="mt-5 max-w-[44ch] text-lg/7 text-pretty text-ink">{children}</p>
+      </div>
+      <div className={`mx-auto w-full max-w-[380px] ${flip ? "md:order-1" : ""}`}>{media}</div>
     </div>
   );
 }
 
 export default function Showcase() {
   return (
-    <section className="mx-auto max-w-6xl px-6">
-      {/* what it is */}
-      <div className="mx-auto max-w-2xl py-20 text-center md:py-28">
-        <p className="text-[clamp(1.4rem,3.4vw,2.1rem)] leading-snug text-ink">
-          It watches how much <em className="not-italic font-bold text-sprout-deep">active</em> AI time you rack up —
-          apps, terminal tools, AI sites — and when you cross your limit, it sits you down for a few minutes outside.
-        </p>
-        <Link
-          href="/how-it-works"
-          className="mt-6 inline-block font-semibold text-sprout-deep underline-offset-4 hover:underline"
-        >
-          See how it works →
-        </Link>
-      </div>
+    <section className="py-20 md:py-28">
+      <div className="mx-auto max-w-6xl px-6">
+        <h2 className="max-w-[24ch] font-display text-5xl text-balance text-accent-deep sm:text-6xl">What happens</h2>
 
-      {/* set your pace */}
-      <div className="grid items-center gap-10 py-10 md:grid-cols-2 md:gap-16 md:py-16">
-        <div className="mx-auto w-full max-w-[360px] md:order-1">
-          <OnboardingMock />
-        </div>
-        <div className="md:order-2">
-          <Copy kicker="set your pace" title="A ten-second hello.">
-            Tell it your name, how long you can go before a break, and how long the break lasts. Then it slips into
-            your menu bar — no dock icon, no clutter — and gets out of the way.
-          </Copy>
-        </div>
-      </div>
+        <dl className="mt-12 grid gap-y-10 md:grid-cols-3 md:gap-x-16 md:gap-y-0">
+          {steps.map((s) => (
+            <div key={s.title} className="border-t border-line pt-6">
+              <dt className="text-xl font-semibold text-ink">{s.title}</dt>
+              <dd className="mt-3 max-w-[40ch] text-lg/7 text-pretty text-ink-muted sm:text-base/7">{s.body}</dd>
+            </div>
+          ))}
+        </dl>
 
-      {/* tune everything */}
-      <div className="grid items-center gap-10 py-10 md:grid-cols-2 md:gap-16 md:py-16">
-        <div className="md:order-1">
-          <Copy kicker="tune everything" title="Yours to dial in.">
-            Change the limit, the rolling window, the break length, and exactly what counts as “AI” — which apps, which
-            command-line tools, which websites. Soft sliders, no spreadsheets.
-          </Copy>
-        </div>
-        <div className="mx-auto w-full max-w-[380px] md:order-2">
-          <SettingsMock />
+        <div className="mt-28 space-y-24 md:mt-36 md:space-y-32">
+          <Split eyebrow="Setting up" title="It takes about ten seconds." media={<OnboardingMock />} flip>
+            Your name, how long you can go before a break, and how long the break should last. After that it lives in
+            the menu bar. There is no Dock icon and nothing to check on.
+          </Split>
+
+          <Split eyebrow="Settings" title="Change your mind whenever." media={<SettingsMock />}>
+            Sliders for the limit, the rolling window, and the break length. Checkboxes for which apps, terminal
+            tools, and websites count as AI. That is the whole settings screen.
+          </Split>
         </div>
       </div>
     </section>

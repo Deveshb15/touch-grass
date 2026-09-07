@@ -1,16 +1,7 @@
 @import "tailwindcss";
 
-/* Hallmark · genre: playful · macrostructure: Marquee Hero · theme: custom (pink dawn)
- * enrichment: hand-built CSS/SVG dawn + live break scene (sprout grows → sways, Tier A/B) · nav: N1 minimal · footer: Ft8 marquee
- * custom: vibe "calm pink dawn, soft, alive" · paper oklch(97% .016 65) ·
- *   accent oklch(81% .091 3) warm-rose · display Fredoka + body Nunito
- * axes: paper-band light · display rounded-sans · accent warm-rose
- * pre-emit critique: P5 H5 E5 S5 R4 V5
- * audit fixes: focus-visible (g26) · single-signal hover (g13) · reduced-motion (g27) · aria on scene (g33) · no fake chrome (g47)
- */
-
 @theme {
-  /* — Pink-dawn palette (from the app's DawnTheme.swift → OKLCH) — */
+  /* Pink-dawn palette, taken from the app's DawnTheme.swift */
   --color-sky-top: oklch(90.1% 0.035 322.9);
   --color-sky-hi: oklch(90.7% 0.035 4.6);
   --color-sky-mid: oklch(93.2% 0.030 46.3);
@@ -18,90 +9,70 @@
   --color-paper-2: oklch(94.6% 0.022 40);
   --color-accent: oklch(81.2% 0.091 2.7);
   --color-accent-deep: oklch(44.9% 0.087 354.4);
-  --color-ink: oklch(43.7% 0.050 311.8);
-  --color-ink-muted: oklch(64.9% 0.052 312.8);
+  --color-ink: oklch(38% 0.045 311.8);
+  --color-ink-muted: oklch(58% 0.05 312.8);
   --color-sprout: oklch(69.4% 0.175 138.9);
-  --color-sprout-deep: oklch(57.6% 0.150 141.2);
+  --color-sprout-deep: oklch(52% 0.14 141.2);
   --color-sun: oklch(86.8% 0.068 57.3);
   --color-cta: oklch(87.6% 0.057 3.3);
   --color-cta-b: oklch(90.6% 0.047 57.8);
-  --color-line: oklch(50% 0.04 320 / 0.14);
+  --color-line: oklch(35% 0.05 320 / 0.12);
 
-  --font-display: var(--font-fredoka);
-  --font-body: var(--font-nunito);
+  --font-display: var(--font-instrument-serif), Georgia, serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-
-  --radius-card: 26px;
 }
 
-/* Live "break" scene palette (from PlantView.swift / SkyPalette.swift, golden hour).
-   Declared on :root — NOT @theme — so they survive Tailwind's theme tree-shaking and
-   resolve inside SVG fill/stroke (used only via var() in inline styles). sRGB hex so
-   SVG paint is reliable. */
-:root {
-  --color-scene-sky-top: #e9b98e;
-  --color-scene-sky-bot: #fbe9d6;
-  --color-scene-sun: #f4954f;
-  --color-scene-hill: #e2b083;
-  --color-scene-shore: #9a7a5e;
-  --color-scene-shore-deep: #5e4b3a;
-  --color-scene-stem: #6e7a55;
-  --color-scene-leaf: #869a66;
-  --color-scene-leaf-light: #9bae7b;
-  --color-scene-petal: #e8a87c;
-  --color-scene-petal-core: #f2c879;
-  --color-scene-bird: #4a3f30;
-}
-
-/* — base — */
+/* base */
 html, body { overflow-x: clip; }
 html { scroll-behavior: smooth; }
 body {
   background: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 ::selection { background: var(--color-accent); color: #fff; }
-:focus-visible { outline: 2px solid var(--color-accent-deep); outline-offset: 2px; border-radius: 3px; }
+:focus-visible { outline: 2px solid var(--color-accent-deep); outline-offset: 3px; border-radius: 4px; }
 
-/* — long-form content (FAQ / how-it-works / landing pages) — */
-.prose-tg { color: var(--color-ink); font-size: 1.075rem; line-height: 1.72; }
+/* long-form pages (how it works, FAQ, privacy, download) */
+.prose-tg { color: var(--color-ink); font-size: 1.0625rem; line-height: 1.7; }
 .prose-tg > * + * { margin-top: 1.1em; }
 .prose-tg h2 {
-  font-family: var(--font-display); font-weight: 600; color: var(--color-accent-deep);
-  font-size: clamp(1.55rem, 3.4vw, 2.1rem); line-height: 1.1;
-  margin-top: 2.2em; margin-bottom: 0.1em;
+  font-family: var(--font-display); font-weight: 400; color: var(--color-accent-deep);
+  font-size: clamp(1.9rem, 3.6vw, 2.5rem); line-height: 1.05; letter-spacing: -0.01em; text-wrap: balance;
+  margin-top: 2.1em; margin-bottom: 0.15em;
 }
 .prose-tg h3 {
-  font-family: var(--font-display); font-weight: 600; color: var(--color-ink);
-  font-size: 1.2rem; margin-top: 1.5em; margin-bottom: 0.1em;
+  font-weight: 600; color: var(--color-ink);
+  font-size: 1.15rem; margin-top: 1.5em; margin-bottom: 0.1em;
 }
-.prose-tg p, .prose-tg ul { max-width: 68ch; }
+.prose-tg p, .prose-tg ul, .prose-tg ol { max-width: 64ch; text-wrap: pretty; }
 .prose-tg ul { list-style: none; padding-left: 0; }
-.prose-tg li { position: relative; padding-left: 1.4em; margin-top: 0.55em; }
-.prose-tg li::before {
-  content: ""; position: absolute; left: 0; top: 0.62em;
-  width: 7px; height: 7px; border-radius: 2px; background: var(--color-sprout);
+.prose-tg ol { list-style: decimal; padding-left: 1.4em; }
+.prose-tg li { margin-top: 0.5em; }
+.prose-tg ul > li { position: relative; padding-left: 1.4em; }
+.prose-tg ul > li::before {
+  content: ""; position: absolute; left: 0; top: 0.68em;
+  width: 6px; height: 6px; border-radius: 999px; background: var(--color-sprout-deep);
 }
 .prose-tg a {
-  color: var(--color-accent-deep); font-weight: 600;
-  text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1.5px;
+  color: var(--color-accent-deep); font-weight: 500;
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklch, var(--color-accent-deep) 40%, transparent);
 }
-.prose-tg a:hover { color: var(--color-ink); }
-.prose-tg strong { color: var(--color-ink); font-weight: 700; }
+.prose-tg a:hover { text-decoration-color: currentColor; }
+.prose-tg strong { color: var(--color-ink); font-weight: 600; }
 .prose-tg code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em;
   background: var(--color-paper-2); padding: 0.1em 0.4em; border-radius: 6px; color: var(--color-accent-deep);
 }
-.prose-tg h2:first-child, .prose-tg h3:first-child, .prose-tg p:first-child { margin-top: 0; }
-h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.02; }
-h1, h2 { overflow-wrap: anywhere; }
+.prose-tg > :first-child { margin-top: 0; }
 
-/* — the living dawn (hand-built; deliberately a landscape, not a mesh blob) — */
+/* the dawn sky behind the hero (a landscape, on purpose) */
 .dawn-sky {
   background:
     radial-gradient(125% 80% at 74% 4%, oklch(99.5% 0.02 70 / 0.9), transparent 46%),
@@ -132,28 +103,7 @@ h1, h2 { overflow-wrap: anywhere; }
 @keyframes drift { from { transform: translateX(-3%); } to { transform: translateX(3%); } }
 @keyframes fly { from { transform: translate(-14vw, 0); } to { transform: translate(118vw, 0); } }
 
-/* — live "break" scene: a sprout that grows on load, then sways in the wind — */
-.scene-sun {
-  background: radial-gradient(closest-side, #fff 8%, var(--color-scene-sun) 46%, transparent 74%);
-  animation: sun-breathe 7s var(--ease-in-out) infinite;
-  will-change: transform, opacity;
-}
-.plant-grow { transform-box: fill-box; transform-origin: bottom center; animation: plant-grow 1.5s var(--ease-out) both; }
-.plant-sway { transform-box: fill-box; transform-origin: bottom center; animation: plant-sway 6.5s var(--ease-in-out) infinite alternate; }
-.leaf-flutter { transform-box: fill-box; transform-origin: bottom center; animation: leaf-flutter 4.8s var(--ease-in-out) infinite alternate; }
-.blade { transform-box: fill-box; transform-origin: bottom center; animation: grass-sway 5s var(--ease-in-out) infinite alternate; }
-
-@keyframes plant-grow { 0% { transform: scaleY(0.16); opacity: 0; } 55% { opacity: 1; } 100% { transform: scaleY(1); opacity: 1; } }
-@keyframes plant-sway { from { transform: rotate(-2.4deg); } to { transform: rotate(2.6deg); } }
-@keyframes leaf-flutter { from { transform: rotate(-1.6deg); } to { transform: rotate(1.8deg); } }
-@keyframes grass-sway { from { transform: rotate(-5deg); } to { transform: rotate(6deg); } }
-
-/* — Ft8 marquee footer — */
-.marquee-track { animation: marquee 30s linear infinite; }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .sun, .drift-a, .drift-b, .bird, .marquee-track,
-  .scene-sun, .plant-grow, .plant-sway, .leaf-flutter, .blade { animation: none !important; }
+  .sun, .drift-a, .drift-b, .bird { animation: none !important; }
 }

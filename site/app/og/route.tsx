@@ -50,7 +50,7 @@ export function GET(request: Request) {
         </div>
         {/* footer */}
         <div style={{ display: "flex", fontSize: "28px", color: "#9a86a6" }}>
-          Touch Grass — free, open-source macOS app
+          Touch Grass, a free and open source Mac app
         </div>
       </div>
     ),
